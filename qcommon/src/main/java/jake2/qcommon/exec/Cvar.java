@@ -356,7 +356,7 @@ public class Cvar extends Globals {
      */
     public void updateLatchedVars() {
         for (cvar_t var : cvarMap.values()) {
-            if (var.latched_string == null || var.latched_string.length() == 0)
+            if (var.latched_string == null || var.latched_string.isEmpty())
                 continue;
             var.string = var.latched_string;
             var.latched_string = null;

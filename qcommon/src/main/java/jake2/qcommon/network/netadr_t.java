@@ -110,17 +110,14 @@ public class netadr_t {
 
 
     public InetAddress getInetAddress() throws UnknownHostException {
-        switch (type) {
-        case NA_BROADCAST:
-            return InetAddress.getByName("255.255.255.255");
-        case NA_LOOPBACK:
-        	// localhost / 127.0.0.1
-            return InetAddress.getByName(null);
-        case NA_IP:
-            return InetAddress.getByAddress(ip);
-        default:
-            return null;
-        }
+        return switch (type) {
+            case NA_BROADCAST -> InetAddress.getByName("255.255.255.255");
+            case NA_LOOPBACK ->
+                // localhost / 127.0.0.1
+                    InetAddress.getByName(null);
+            case NA_IP -> InetAddress.getByAddress(ip);
+            default -> null;
+        };
     }
 
     public void set(netadr_t from) {
@@ -133,12 +130,10 @@ public class netadr_t {
     }
 
     public String toString() {
-        return new StringBuilder()
-                .append(ip[0] & 0xFF).append('.')
-                .append(ip[1] & 0xFF).append('.')
-                .append(ip[2] & 0xFF).append('.')
-                .append(ip[3] & 0xFF).append(':')
-                .append(port).toString();
-
+        return String.valueOf(ip[0] & 0xFF) + '.' +
+                (ip[1] & 0xFF) + '.' +
+                (ip[2] & 0xFF) + '.' +
+                (ip[3] & 0xFF) + ':' +
+                port;
     }
 }

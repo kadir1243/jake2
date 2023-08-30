@@ -276,7 +276,7 @@ public class SV_MAIN implements JakeServer {
             if (adr.CompareBaseAdr(cl.netchan.remote_address)
                     && (cl.netchan.qport == qport || adr.port == cl.netchan.remote_address.port)) {
                 if (!adr.IsLocalAddress() && (realtime - cl.lastconnect) < (SV_MAIN.sv_reconnect_limit.value * 1000)) {
-                    Com.DPrintf(adr.toString() + ":reconnect rejected : too soon\n");
+                    Com.DPrintf(adr + ":reconnect rejected : too soon\n");
                     return;
                 }
                 Com.Printf(adr + ":reconnect\n");

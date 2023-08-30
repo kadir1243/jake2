@@ -1,21 +1,19 @@
 plugins {
-//    kotlin("jvm") version "1.4.0" apply false
     id("org.jetbrains.kotlin.jvm") version "1.7.0"
-
 }
 
-
 allprojects {
-
     group = "org.bytonic"
-    version = "1.1.1"
+    version = "1.1.2"
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "java")
 
-//    apply {
-//        plugin("org.jetbrains.kotlin.jvm")
-//        plugin("java")
-//    }
+    java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+
+    tasks.withType<JavaCompile> {
+        options.isDeprecation = true
+    }
 
     repositories {
         mavenCentral()
@@ -23,7 +21,7 @@ allprojects {
     }
 
     dependencies {
-        testImplementation(group = "junit", name = "junit", version = "4.12")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     }
 }
 

@@ -75,7 +75,7 @@ public final class Cbuf {
                         sb.append(c);
                     }
                 }
-                if (sb.length() > 0)
+                if (!sb.isEmpty())
                     result.add(sb.toString());
             } else {
                 result.add(line);
@@ -150,9 +150,9 @@ public final class Cbuf {
             if (text.charAt(i) == '+') {
                 i++;
 
-                int j;
-                for (j = i; j < text.length() && (text.charAt(j) != '+') && (text.charAt(j) != '-'); j++) {
-                    ;
+                int j = i;
+                while (j < text.length() && (text.charAt(j) != '+') && (text.charAt(j) != '-')) {
+                    j++;
                 }
 
                 build.append(text.substring(i, j));
@@ -162,7 +162,7 @@ public final class Cbuf {
             }
         }
 
-        boolean isEmpty = (build.length() == 0);
+        boolean isEmpty = (build.isEmpty());
         if (!isEmpty)
             AddText(build.toString());
 

@@ -110,7 +110,7 @@ public class GameSpawn {
                 gameExports.level.level_name = ent.message;
             } else
                 gameExports.level.level_name = gameExports.level.mapname;
-            if (ent.st.sky != null && ent.st.sky.length() > 0)
+            if (ent.st.sky != null && !ent.st.sky.isEmpty())
                 gameExports.gameImports.configstring(Defines.CS_SKY, ent.st.sky);
             else
                 gameExports.gameImports.configstring(Defines.CS_SKY, "unit1_");

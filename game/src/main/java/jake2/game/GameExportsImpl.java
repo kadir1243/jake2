@@ -833,7 +833,7 @@ public class GameExportsImpl implements GameExports {
         count = 0;
         for (i = 0; i < game.maxclients; i++) {
             if (game.clients[i].pers.connected) {
-                index[count] = new Integer(i);
+                index[count] = i;
                 count++;
             }
         }
@@ -845,9 +845,9 @@ public class GameExportsImpl implements GameExports {
         large = "";
 
         for (i = 0; i < count; i++) {
-            small = game.clients[index[i].intValue()].getPlayerState().stats[Defines.STAT_FRAGS]
+            small = game.clients[index[i]].getPlayerState().stats[Defines.STAT_FRAGS]
                     + " "
-                    + game.clients[index[i].intValue()].pers.netname
+                    + game.clients[index[i]].pers.netname
                     + "\n";
 
             if (small.length() + large.length() > 1024 - 100) {
@@ -982,7 +982,7 @@ public class GameExportsImpl implements GameExports {
         }
 
         if (gameImports.cvar("dedicated", "0", Defines.CVAR_NOSET).value != 0)
-            gameImports.cprintf(null, Defines.PRINT_CHAT, "" + text + "");
+            gameImports.cprintf(null, Defines.PRINT_CHAT, text);
 
         for (int j = 1; j <= game.maxclients; j++) {
             SubgameEntity other = g_edicts[j];
@@ -994,7 +994,7 @@ public class GameExportsImpl implements GameExports {
                 if (!GameUtil.OnSameTeam(ent, other, gameCvars.dmflags.value))
                     continue;
             }
-            gameImports.cprintf(other, Defines.PRINT_CHAT, "" + text + "");
+            gameImports.cprintf(other, Defines.PRINT_CHAT, text);
         }
 
     }
@@ -1013,8 +1013,7 @@ public class GameExportsImpl implements GameExports {
                 continue;
 
             gclient_t client = e2.getClient();
-            String st = ""
-                    + (level.framenum - client.resp.enterframe)
+            String st = (level.framenum - client.resp.enterframe)
                     / 600
                     + ":"
                     + ((level.framenum - client.resp.enterframe) % 600)
@@ -1024,7 +1023,7 @@ public class GameExportsImpl implements GameExports {
 
             if (text.length() + st.length() > 1024 - 50) {
                 text += "And more...\n";
-                gameImports.cprintf(ent, PRINT_HIGH, "" + text + "");
+                gameImports.cprintf(ent, PRINT_HIGH, text);
                 return;
             }
             text += st;
@@ -1287,7 +1286,7 @@ public class GameExportsImpl implements GameExports {
         }
 
         // see if it's in the map list
-        if (gameCvars.sv_maplist.string.length() > 0) {
+        if (!gameCvars.sv_maplist.string.isEmpty()) {
             String mapList = gameCvars.sv_maplist.string;
             // todo: cleanup parsing of maplist
             String f = null;
@@ -1315,7 +1314,7 @@ public class GameExportsImpl implements GameExports {
         }
 
         //not in the map list
-        if (level.nextmap.length() > 0) // go to a specific map
+        if (!level.nextmap.isEmpty()) // go to a specific map
             PlayerHud.BeginIntermission(CreateTargetChangeLevel(level.nextmap), this);
         else { // search for a changelevel
             EdictIterator edit = null;
@@ -1395,94 +1394,37 @@ public class GameExportsImpl implements GameExports {
             return;
 
         switch (cmd) {
-            case "use":
-                Use_f(ent, args);
-                break;
-            case "drop":
-                Drop_f(ent, args);
-                break;
-            case "give":
-                Give_f(ent, args);
-                break;
-            case "god":
-                God_f(ent);
-                break;
-            case "notarget":
-                Notarget_f(ent);
-                break;
-            case "noclip":
-                Noclip_f(ent);
-                break;
-            case "inven":
-                Inven_f(ent);
-                break;
-            case "invnext":
-                GameItems.SelectNextItem(ent, -1, this);
-                break;
-            case "invprev":
-                GameItems.SelectPrevItem(ent, -1, this);
-                break;
-            case "invnextw":
-                GameItems.SelectNextItem(ent, GameDefines.IT_WEAPON, this);
-                break;
-            case "invprevw":
-                GameItems.SelectPrevItem(ent, GameDefines.IT_WEAPON, this);
-                break;
-            case "invnextp":
-                GameItems.SelectNextItem(ent, GameDefines.IT_POWERUP, this);
-                break;
-            case "invprevp":
-                GameItems.SelectPrevItem(ent, GameDefines.IT_POWERUP, this);
-                break;
-            case "invuse":
-                InvUse_f(ent);
-                break;
-            case "invdrop":
-                InvDrop_f(ent);
-                break;
-            case "weapprev":
-                WeapPrev_f(ent);
-                break;
-            case "weapnext":
-                WeapNext_f(ent);
-                break;
-            case "weaplast":
-                WeapLast_f(ent);
-                break;
-            case "kill":
-                Kill_f(ent, this);
-                break;
-            case "putaway":
-                PutAway_f(ent);
-                break;
-            case "wave":
-                Wave_f(ent, args);
-                break;
-            case "playerlist":
-                PlayerList_f(ent);
-                break;
-            case "showposition":
-                ShowPosition_f(ent);
-                break;
-            case "spawn":
-                GameSpawn.SpawnNewEntity(ent, args, this);
-                break;
-            case "parse":
-                GameSpawn.createEntity(ent, args, this);
-                break;
-            case "spawnrandommonster":
-                GameSpawn.SpawnRandomMonster(ent, this);
-                break;
-            case "entityinfo":
-                printEntityInfo(ent, args);
-                break;
-            case "entityinfobyname":
-                findEdictByName(ent, args);
-                break;
-            default:
+            case "use" -> Use_f(ent, args);
+            case "drop" -> Drop_f(ent, args);
+            case "give" -> Give_f(ent, args);
+            case "god" -> God_f(ent);
+            case "notarget" -> Notarget_f(ent);
+            case "noclip" -> Noclip_f(ent);
+            case "inven" -> Inven_f(ent);
+            case "invnext" -> GameItems.SelectNextItem(ent, -1, this);
+            case "invprev" -> GameItems.SelectPrevItem(ent, -1, this);
+            case "invnextw" -> GameItems.SelectNextItem(ent, GameDefines.IT_WEAPON, this);
+            case "invprevw" -> GameItems.SelectPrevItem(ent, GameDefines.IT_WEAPON, this);
+            case "invnextp" -> GameItems.SelectNextItem(ent, GameDefines.IT_POWERUP, this);
+            case "invprevp" -> GameItems.SelectPrevItem(ent, GameDefines.IT_POWERUP, this);
+            case "invuse" -> InvUse_f(ent);
+            case "invdrop" -> InvDrop_f(ent);
+            case "weapprev" -> WeapPrev_f(ent);
+            case "weapnext" -> WeapNext_f(ent);
+            case "weaplast" -> WeapLast_f(ent);
+            case "kill" -> Kill_f(ent, this);
+            case "putaway" -> PutAway_f(ent);
+            case "wave" -> Wave_f(ent, args);
+            case "playerlist" -> PlayerList_f(ent);
+            case "showposition" -> ShowPosition_f(ent);
+            case "spawn" -> GameSpawn.SpawnNewEntity(ent, args, this);
+            case "parse" -> GameSpawn.createEntity(ent, args, this);
+            case "spawnrandommonster" -> GameSpawn.SpawnRandomMonster(ent, this);
+            case "entityinfo" -> printEntityInfo(ent, args);
+            case "entityinfobyname" -> findEdictByName(ent, args);
+            default ->
                 // anything that doesn't match a command will be a chat
-                Say_f(ent, false, true, args);
-                break;
+                    Say_f(ent, false, true, args);
         }
     }
     private void findEdictByName(SubgameEntity ent, List<String> args) {

@@ -565,19 +565,19 @@ public class PrintfFormat {
 					i = cs.getArgumentPosition() - 1;
 					if (cs.isPositionalFieldWidth()) {
 						int ifw = cs.getArgumentPositionForFieldWidth() - 1;
-						cs.setFieldWidthWithArg(((Integer) o[ifw]).intValue());
+						cs.setFieldWidthWithArg((Integer) o[ifw]);
 					}
 					if (cs.isPositionalPrecision()) {
 						int ipr = cs.getArgumentPositionForPrecision() - 1;
-						cs.setPrecisionWithArg(((Integer) o[ipr]).intValue());
+						cs.setPrecisionWithArg((Integer) o[ipr]);
 					}
 				} else {
 					if (cs.isVariableFieldWidth()) {
-						cs.setFieldWidthWithArg(((Integer) o[i]).intValue());
+						cs.setFieldWidthWithArg((Integer) o[i]);
 						i++;
 					}
 					if (cs.isVariablePrecision()) {
-						cs.setPrecisionWithArg(((Integer) o[i]).intValue());
+						cs.setPrecisionWithArg((Integer) o[i]);
 						i++;
 					}
 				}
@@ -2870,7 +2870,6 @@ public class PrintfFormat {
 		/**
 		 * Check for a conversion character.  If it is
 		 * there, store it.
-		 * @param x the String to format.
 		 * @return <code>true</code> if the conversion
 		 *     character is there, and
 		 *     <code>false</code> otherwise.

@@ -1,12 +1,13 @@
 package jake2.game.items;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
 import static jake2.qcommon.Defines.EF_COLOR_SHELL;
 import static jake2.qcommon.Defines.EF_ROTATE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameItemTest {
     @Test
@@ -41,23 +42,23 @@ public class GameItemTest {
         assertEquals(0, flags);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptyDictFlags() {
-        GameItem.parseFlags("EF_ROTATE|EF_COLOR_SHELL", null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> GameItem.parseFlags("EF_ROTATE|EF_COLOR_SHELL", null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testUnknownFlags() {
-        GameItem.parseFlags("EF_ROTATE|EF_BLAH_BLAH", Map.of(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> GameItem.parseFlags("EF_ROTATE|EF_BLAH_BLAH", Map.of(
                 "EF_ROTATE", EF_ROTATE,
-                "EF_COLOR_SHELL", EF_COLOR_SHELL));
+                "EF_COLOR_SHELL", EF_COLOR_SHELL)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testUnknownFlag() {
-        GameItem.parseFlags("EF_BLAH_BLAH", Map.of(
+        Assertions.assertThrows(IllegalArgumentException.class, () -> GameItem.parseFlags("EF_BLAH_BLAH", Map.of(
                 "EF_ROTATE", EF_ROTATE,
-                "EF_COLOR_SHELL", EF_COLOR_SHELL));
+                "EF_COLOR_SHELL", EF_COLOR_SHELL)));
     }
 
 

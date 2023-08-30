@@ -43,7 +43,7 @@ import org.lwjgl.openal.OpenALException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class Channel {
     private static IntBuffer sources = Lib.newIntBuffer(MAX_CHANNELS);
     // a reference of L:WJGLSoundImpl.buffers 
     private static IntBuffer buffers;
-    private static Map looptable = new Hashtable(MAX_CHANNELS);
+    private static Map<Integer, Channel> looptable = new HashMap<>(MAX_CHANNELS);
 
     private static int numChannels;
 
@@ -366,89 +366,85 @@ public class Channel {
      * 	as the entities are sent to the client
      */
     static void addLoopSounds() {
+		if ((ClientGlobals.cl_paused.value != 0.0f) || (ClientGlobals.cls.state != Globals.ca_active) || !ClientGlobals.cl.sound_prepped) {
+			removeUnusedLoopSounds();
+			return;
+		}
 
-	if ((ClientGlobals.cl_paused.value != 0.0f) || (ClientGlobals.cls.state != Globals.ca_active) || !ClientGlobals.cl.sound_prepped) {
-	    removeUnusedLoopSounds();
-	    return;
-	}
+		Channel ch;
+		sfx_t	sfx;
+		sfxcache_t sc;
+		int num;
+		entity_state_t ent;
+		int sound;
 
-	Channel ch;
-	sfx_t	sfx;
-	sfxcache_t sc;
-	int num;
-	entity_state_t ent;
-	Object key;
-	int sound = 0;
+		for (int i = 0; i< ClientGlobals.cl.frame.num_entities ; i++) {
+			num = (ClientGlobals.cl.frame.parse_entities + i)&(Defines.MAX_PARSE_ENTITIES-1);
+			ent = ClientGlobals.cl_parse_entities[num];
+			sound = ent.sound;
 
-	for (int i = 0; i< ClientGlobals.cl.frame.num_entities ; i++) {
-	    num = (ClientGlobals.cl.frame.parse_entities + i)&(Defines.MAX_PARSE_ENTITIES-1);
-	    ent = ClientGlobals.cl_parse_entities[num];
-	    sound = ent.sound;
+			if (sound == 0) continue;
 
-	    if (sound == 0) continue;
+			int key = ent.number;
+			ch = looptable.get(key);
 
-	    key = new Integer(ent.number);
-	    ch = (Channel)looptable.get(key);
+			if (ch != null) {
+				// keep on looping
+				ch.autosound = true;
+				Math3D.VectorCopy(ent.origin, ch.origin);
+				continue;
+			}
 
-	    if (ch != null) {
-		// keep on looping
-		ch.autosound = true;
-		Math3D.VectorCopy(ent.origin, ch.origin);
-		continue;
-	    }
+			sfx = ClientGlobals.cl.sound_precache[sound];
+			if (sfx == null)
+				continue;		// bad sound effect
 
-	    sfx = ClientGlobals.cl.sound_precache[sound];
-	    if (sfx == null)
-		continue;		// bad sound effect
+			sc = sfx.cache;
+			if (sc == null)
+				continue;
 
-	    sc = sfx.cache;
-	    if (sc == null)
-		continue;
+			// allocate a channel
+			ch = Channel.pickForLoop(buffers.get(sfx.bufferId), 6);
+			if (ch == null)
+				break;
 
-	    // allocate a channel
-	    ch = Channel.pickForLoop(buffers.get(sfx.bufferId), 6);
-	    if (ch == null)
-		break;
+			ch.type = FIXED;
+			Math3D.VectorCopy(ent.origin, ch.origin);
+			ch.autosound = true;
 
-	    ch.type = FIXED;
-	    Math3D.VectorCopy(ent.origin, ch.origin);
-	    ch.autosound = true;
+			looptable.put(key, ch);
+			AL10.alSourcei(ch.sourceId, AL10.AL_LOOPING, AL10.AL_TRUE);
+		}
 
-	    looptable.put(key, ch);
-	    AL10.alSourcei(ch.sourceId, AL10.AL_LOOPING, AL10.AL_TRUE);
-	}
-
-	removeUnusedLoopSounds();
-
+		removeUnusedLoopSounds();
     }
 
     private static void removeUnusedLoopSounds() {
-	Channel ch;
-	// stop unused loopsounds
-	for (Iterator iter = looptable.values().iterator(); iter.hasNext();) {
-	    ch = (Channel)iter.next();
-	    if (!ch.autosound) {
-		AL10.alSourceStop(ch.sourceId);
-		AL10.alSourcei(ch.sourceId, AL10.AL_LOOPING, AL10.AL_FALSE);
-		iter.remove();
-		ch.clear();
-	    }
-	}
+		// stop unused loopsounds
+        Iterator<Channel> iter = looptable.values().iterator();
+        while (iter.hasNext()) {
+			Channel ch = iter.next();
+			if (!ch.autosound) {
+                AL10.alSourceStop(ch.sourceId);
+                AL10.alSourcei(ch.sourceId, AL10.AL_LOOPING, AL10.AL_FALSE);
+                iter.remove();
+                ch.clear();
+            }
+        }
     }
 
     static void convertVector(float[] from, FloatBuffer to) {
-	to.put(0, from[0]);
-	to.put(1, from[2]);
-	to.put(2, -from[1]);
+		to.put(0, from[0]);
+		to.put(1, from[2]);
+		to.put(2, -from[1]);
     }
 
     static void convertOrientation(float[] forward, float[] up, FloatBuffer orientation) {
-	orientation.put(0, forward[0]);
-	orientation.put(1, forward[2]);
-	orientation.put(2, -forward[1]);
-	orientation.put(3, up[0]);
-	orientation.put(4, up[2]);
-	orientation.put(5, -up[1]);
+		orientation.put(0, forward[0]);
+		orientation.put(1, forward[2]);
+		orientation.put(2, -forward[1]);
+		orientation.put(3, up[0]);
+		orientation.put(4, up[2]);
+		orientation.put(5, -up[1]);
     }
-
 }

@@ -5,15 +5,15 @@ import jake2.game.monsters.M_Gunner;
 import jake2.qcommon.GameExports;
 import jake2.qcommon.exec.Cvar;
 import jake2.qcommon.filesystem.FS;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 public class GameImportsTest {
 
-    @Before
+    @BeforeEach
     public void setup() {
         Cvar.getInstance().ForceSet("basedir", new File("src/test/resources").getAbsoluteFile().toString());
         FS.InitFilesystem();
@@ -25,7 +25,7 @@ public class GameImportsTest {
 
         testInstance.SV_RunGameFrame(100);
 
-        Assert.assertEquals(1, testInstance.sv.framenum);
+        Assertions.assertEquals(1, testInstance.sv.framenum);
     }
 
     @Test
@@ -44,8 +44,8 @@ public class GameImportsTest {
                 soldier = e;
             }
         }
-        Assert.assertNotNull(gunner);
-        Assert.assertNotNull(soldier);
+        Assertions.assertNotNull(gunner);
+        Assertions.assertNotNull(soldier);
         gunner.enemy = soldier;
         gunner.goalentity = soldier;
         gunner.monsterinfo.currentmove = M_Gunner.gunner_move_run;
@@ -56,6 +56,6 @@ public class GameImportsTest {
                 return;
             }
         }
-        Assert.fail("Soldier was not killed");
+        Assertions.fail("Soldier was not killed");
     }
 }

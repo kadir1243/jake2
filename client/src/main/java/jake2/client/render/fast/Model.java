@@ -38,8 +38,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Model
@@ -190,7 +191,7 @@ public abstract class Model extends Surf {
 		model_t mod = null;
 		int		i;
 	
-		if (name == null || name.length() == 0)
+		if (name == null || name.isEmpty())
 			Com.Error(Defines.ERR_DROP, "Mod_ForName: NULL name");
 		
 		//
@@ -211,7 +212,7 @@ public abstract class Model extends Surf {
 		{
 			mod = mod_known[i];
 			
-			if (mod.name.length() == 0)
+			if (mod.name.isEmpty())
 				continue;
 			if (mod.name.equals(name) )
 				return mod;
@@ -224,7 +225,7 @@ public abstract class Model extends Surf {
 		{
 			mod = mod_known[i];
 
-			if (mod.name.length() == 0)
+			if (mod.name.isEmpty())
 				break;	// free spot
 		}
 		if (i == mod_numknown)
@@ -267,22 +268,13 @@ public abstract class Model extends Surf {
 		int ident = bb.getInt();
 		
 		bb.reset();
-		
-		switch (ident)
-		{
-		case qfiles.Md2Model.IDALIASHEADER:
-			Mod_LoadAliasModel(mod, bb);
-			break;
-		case qfiles.Sp2Sprite.IDSPRITEHEADER:
-			Mod_LoadSpriteModel(mod, bb);
-			break;
-		case qfiles.IDBSPHEADER:
-			Mod_LoadBrushModel(mod, bb);
-			break;
-		default:
-			Com.Error(Defines.ERR_DROP,"Mod_NumForName: unknown fileid for " + mod.name);
-			break;
-		}
+
+        switch (ident) {
+            case qfiles.Md2Model.IDALIASHEADER -> Mod_LoadAliasModel(mod, bb);
+            case qfiles.Sp2Sprite.IDSPRITEHEADER -> Mod_LoadSpriteModel(mod, bb);
+            case qfiles.IDBSPHEADER -> Mod_LoadBrushModel(mod, bb);
+            default -> Com.Error(Defines.ERR_DROP, "Mod_NumForName: unknown fileid for " + mod.name);
+        }
 
 		this.fileBuffer = null; // free it for garbage collection
 		return mod;
@@ -389,7 +381,7 @@ public abstract class Model extends Surf {
 
 		for (int i=0 ; i<3 ; i++)
 		{
-			corner[i] = Math.abs(mins[i]) > Math.abs(maxs[i]) ? Math.abs(mins[i]) : Math.abs(maxs[i]);
+			corner[i] = Math.max(Math.abs(mins[i]), Math.abs(maxs[i]));
 		}
 		return Math3D.VectorLength(corner);
 	}
@@ -1071,7 +1063,7 @@ public abstract class Model extends Surf {
 	*/
 	public model_t R_RegisterModel(String name)
 	{
-		model_t	mod = null;
+		model_t	mod;
 		int		i;
 		qfiles.Sp2Sprite sprout;
 		qfiles.Md2Model pheader;
@@ -1120,7 +1112,7 @@ public abstract class Model extends Surf {
 		for (int i=0; i<mod_numknown ; i++)
 		{
 			mod = mod_known[i];
-			if (mod.name.length() == 0)
+			if (mod.name.isEmpty())
 				continue;
 			if (mod.registration_sequence != registration_sequence)
 			{	// don't need this model
@@ -1173,9 +1165,9 @@ public abstract class Model extends Surf {
 	void precompileGLCmds(qfiles.Md2Model model) {
 		model.textureCoordBuf = globalModelTextureCoordBuf.slice();
 		model.vertexIndexBuf = globalModelVertexIndexBuf.slice();
-		Vector tmp = new Vector();
+		List<Integer> tmp = new ArrayList<>();
 			
-		int count = 0;
+		int count;
 		int[] order = model.glCmds;
 		int orderIndex = 0;
 		while (true)
@@ -1185,8 +1177,8 @@ public abstract class Model extends Surf {
 			if (count == 0)
 				break;		// done
 
-			tmp.addElement(new Integer(count));
-				
+			tmp.add(count);
+
 			if (count < 0)
 			{
 				count = -count;
@@ -1211,11 +1203,10 @@ public abstract class Model extends Surf {
 			
 		model.counts = new int[size];
 		model.indexElements = new IntBuffer[size];
-			
-		count = 0;
+
 		int pos = 0;
 		for (int i = 0; i < model.counts.length; i++) {
-			count = ((Integer)tmp.get(i)).intValue();
+			count = tmp.get(i);
 			model.counts[i] = count;
 				
 			count = (count < 0) ? -count : count;

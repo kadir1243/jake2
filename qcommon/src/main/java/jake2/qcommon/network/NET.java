@@ -50,7 +50,7 @@ public final class NET {
         byte[] data = new byte[Defines.MAX_MSGLEN];
 
         int datalen;
-    };
+    }
 
     public static class loopback_t {
         loopmsg_t[] msgs;
@@ -165,7 +165,7 @@ public final class NET {
             SocketAddress dstSocket = new InetSocketAddress(to.getInetAddress(), to.port);
             ip_channels[sock].send(ByteBuffer.wrap(data, 0, length), dstSocket);
         } catch (Exception e) {
-            Com.Println("NET_SendPacket ERROR: " + e + " to " + to.toString());
+            Com.Println("NET_SendPacket ERROR: " + e + " to " + to);
         }
     }
 
@@ -221,12 +221,12 @@ public final class NET {
      * Socket
      */
     public static DatagramSocket Socket(int sock, String ip, int port) {
-        DatagramSocket newsocket = null;
+        DatagramSocket newsocket;
         try {
             if (ip_channels[sock] == null || !ip_channels[sock].isOpen())
                 ip_channels[sock] = DatagramChannel.open();
 
-            if (ip == null || ip.length() == 0 || ip.equals("localhost")) {
+            if (ip == null || ip.isBlank() || ip.equals("localhost")) {
                 if (port == Defines.PORT_ANY) {
                     newsocket = ip_channels[sock].socket();
                     newsocket.bind(new InetSocketAddress(0));
@@ -246,7 +246,7 @@ public final class NET {
             newsocket.setBroadcast(true);
             Com.Println("Opened port: " + port);
         } catch (Exception e) {
-            Com.Println("jake2.qcommon.network.NET.Socket: " + e.toString());
+            Com.Println("jake2.qcommon.network.NET.Socket: " + e);
             e.printStackTrace();
             newsocket = null;
         }

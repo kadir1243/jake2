@@ -3,22 +3,22 @@ package jake2.qcommon.network.messages;
 import jake2.qcommon.*;
 import jake2.qcommon.network.messages.client.*;
 import jake2.qcommon.network.messages.server.*;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static jake2.qcommon.Defines.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This test checks that
@@ -30,7 +30,6 @@ import static org.junit.Assert.assertEquals;
  * </ol>
  * Validated by writing the message to the buffer and comparing the size.
  */
-@RunWith(Parameterized.class)
 public class NetworkMessageSizeTest {
     private static final int INVALID_FRAME_INDEX = 99;
     private static final int SIZE = 1024;
@@ -45,9 +44,7 @@ public class NetworkMessageSizeTest {
         this.message = message;
     }
 
-    @Parameterized.Parameters(name = "{index}, {0} {1}")
-    public static Collection<Object[]> createTestData() {
-
+    private static Stream<Arguments> createTestData() {
         //////////////////
         // SERVER MESSAGES
         //////////////////
@@ -156,31 +153,34 @@ public class NetworkMessageSizeTest {
         testMessages.add(new Object[]{"client.MoveMessage.full", new MoveMessage(false, 1, oldestCmd, oldCmd, newCmd, 1)});
         // invalid one (currentSequence during serialization != currentSequence during deserialization)
         testMessages.add(new Object[]{"client.MoveMessage.invalid", new MoveMessage(false, INVALID_FRAME_INDEX, oldestCmd, oldCmd, newCmd, 2)});
-        return testMessages;
+        return testMessages.stream().map(Arguments::of);
     }
 
-    @Before
+    @BeforeEach
     public void writeMessage() {
         buffer.init(data, SIZE);
         message.writeTo(buffer);
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("createTestData")
     public void testMessageSize() {
-        assertEquals("Message size != buffer size", buffer.cursize, message.getSize());
+        assertEquals(buffer.cursize, message.getSize(), "Message size != buffer size");
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("createTestData")
     public void testBufferFullyRead() {
         if (message instanceof ServerMessage)
             ServerMessage.parseFromBuffer(buffer);
         else { //if (message instanceof ClientMessage)
             ClientMessage.parseFromBuffer(buffer, 1);
         }
-        assertEquals("Buffer is not read fully", buffer.cursize, buffer.readcount);
+        assertEquals(buffer.cursize, buffer.readcount, "Buffer is not read fully");
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("createTestData")
     public void testSerializationDeserializationEquality() {
         final NetworkMessage parsed;
 
@@ -195,7 +195,7 @@ public class NetworkMessageSizeTest {
                 || message instanceof NoopMessage) {
             System.err.println("Skipping test for " + message.getClass());
         } else {
-            assertEquals("Message is different after serialization/deserialization", message, parsed);
+            assertEquals(message, parsed, "Message is different after serialization/deserialization");
         }
 
         // client move message crc validation
@@ -204,13 +204,14 @@ public class NetworkMessageSizeTest {
         }
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("createTestData")
     public void testQuakeNetworkProtocol34Compatibility() {
         try (InputStream inputStream = getClass().getResourceAsStream(testName + ".bin")) {
             final byte[] quake34data = inputStream.readAllBytes();
-            assertEquals("Message size is different from quake34 protocol", quake34data.length, buffer.cursize);
+            assertEquals(quake34data.length, buffer.cursize, "Message size is different from quake34 protocol");
             for (int i = 0; i < quake34data.length; i++) {
-                assertEquals("Message data is different from quake34 protocol at position: " + i, quake34data[i], buffer.data[i]);
+                assertEquals(quake34data[i], buffer.data[i], "Message data is different from quake34 protocol at position: " + i);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -220,8 +221,9 @@ public class NetworkMessageSizeTest {
     /**
      * Enable to save binary message files
      */
-    @Test
-    @Ignore
+    @ParameterizedTest
+    @MethodSource("createTestData")
+    @Disabled
     public void saveBinaryMessage() {
         try (OutputStream out = new FileOutputStream(testName)) {
             out.write(buffer.data, 0, buffer.cursize);

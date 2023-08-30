@@ -40,7 +40,7 @@ public class Renderer {
     // rst: lets use the fast renderer from now on
     //static RenderAPI basicRenderer = new jake2.client.render.basic.Misc();
 
-    static Vector drivers = new Vector(3);
+    static Vector<Ref> drivers = new Vector<>(3);
 
     static {
         try {
@@ -48,7 +48,7 @@ public class Renderer {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    };
+    }
 
     public static void register(Ref impl) {
         if (impl == null) {
@@ -76,13 +76,10 @@ public class Renderer {
      */
     public static refexport_t getDriver(String driverName, boolean fast) {
         // find a driver
-        Ref driver = null;
-        int count = drivers.size();
-        for (int i = 0; i < count; i++) {
-            driver = (Ref) drivers.get(i);
-            if (driver.getName().equals(driverName)) {
-            	// lets use the fast renderer only
-                return driver.GetRefAPI((fast) ? fastRenderer : fastRenderer);
+        for (Ref o : drivers) {
+            if (o.getName().equals(driverName)) {
+                // lets use the fast renderer only
+                return o.GetRefAPI((fast) ? fastRenderer : fastRenderer);
             }
         }
         // null if driver not found
@@ -90,12 +87,12 @@ public class Renderer {
     }
 
     public static String getDefaultName() {
-        return (drivers.isEmpty()) ? null : ((Ref) drivers.firstElement())
+        return (drivers.isEmpty()) ? null : drivers.firstElement()
                 .getName();
     }
 
     public static String getPreferedName() {
-        return (drivers.isEmpty()) ? null : ((Ref) drivers.lastElement())
+        return (drivers.isEmpty()) ? null : drivers.lastElement()
                 .getName();
     }
 
@@ -106,7 +103,7 @@ public class Renderer {
         int count = drivers.size();
         String[] names = new String[count];
         for (int i = 0; i < count; i++) {
-            names[i] = ((Ref) drivers.get(i)).getName();
+            names[i] = drivers.get(i).getName();
         }
         return names;
     }

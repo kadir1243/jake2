@@ -41,40 +41,39 @@ public class S {
 	static Sound impl;
 	static cvar_t s_impl;
 	
-	static Vector drivers = new Vector(3);
+	static Vector<Sound> drivers = new Vector<>(3);
 	
 	/** 
 	 * Searches for and initializes all known sound drivers.
 	 */
 	static {	    
-			// dummy driver (no sound)
-			try {	    
-			    Class.forName("jake2.client.sound.DummyDriver");
-			    // initialize impl with the default value
-			    // this is  necessary for dedicated mode
-			    useDriver("dummy");
-			} catch (Throwable e) {
-			    Com.DPrintf("could not init dummy sound driver class.");
-			}
+		// dummy driver (no sound)
+		try {
+			Class.forName("jake2.client.sound.DummyDriver");
+			// initialize impl with the default value
+			// this is  necessary for dedicated mode
+			useDriver("dummy");
+		} catch (Throwable e) {
+			Com.DPrintf("could not init dummy sound driver class.");
+		}
 			
-			try {
-				Class.forName("org.lwjgl.openal.AL");
-				Class.forName("jake2.client.sound.lwjgl.LWJGLSoundImpl");
-			} catch (Throwable e) {
-				// ignore the lwjgl driver if runtime not in classpath
-			    Com.DPrintf("could not init lwjgl sound driver class.");
-			}
+		try {
+			Class.forName("org.lwjgl.openal.AL");
+			Class.forName("jake2.client.sound.lwjgl.LWJGLSoundImpl");
+		} catch (Throwable e) {
+			// ignore the lwjgl driver if runtime not in classpath
+			Com.DPrintf("could not init lwjgl sound driver class.");
+		}
 			
-			// prefered driver
-			try {
-				Class.forName("com.jogamp.openal.AL");
-				Class.forName("jake2.client.sound.joal.JOALSoundImpl");
-			} catch (Throwable e) {
-				// ignore the joal driver if runtime not in classpath
-			    Com.DPrintf("could not init joal sound driver class.");
-			}
-		
-	};
+		// prefered driver
+		try {
+			Class.forName("com.jogamp.openal.AL");
+			Class.forName("jake2.client.sound.joal.JOALSoundImpl");
+		} catch (Throwable e) {
+			// ignore the joal driver if runtime not in classpath
+			Com.DPrintf("could not init joal sound driver class.");
+		}
+	}
 	
 	/**
 	 * Registers a new Sound Implementor.
@@ -92,17 +91,14 @@ public class S {
 	 * Switches to the specific sound driver.
 	 */
 	public static void useDriver(String driverName) {
-		Sound driver = null;
-		int count = drivers.size();
-		for (int i = 0; i < count; i++) {
-			driver = (Sound) drivers.get(i);
-			if (driver.getName().equals(driverName)) {
-				impl = driver;
-				return;
-			}
-		}
+		for (Sound sound : drivers) {
+            if (sound.getName().equals(driverName)) {
+                impl = sound;
+                return;
+            }
+        }
 		// if driver not found use dummy
-		impl = (Sound)drivers.lastElement();
+		impl = drivers.lastElement();
 	}
 	
 	/**
@@ -122,7 +118,7 @@ public class S {
 		// set the last registered driver as default
 		String defaultDriver = "dummy";
 		if (drivers.size() > 1){
-			defaultDriver = ((Sound)drivers.lastElement()).getName();
+			defaultDriver = drivers.lastElement().getName();
 		}
 		
 		s_impl = Cvar.getInstance().Get("s_impl", defaultDriver, Defines.CVAR_ARCHIVE);
@@ -220,7 +216,7 @@ public class S {
 	public static String[] getDriverNames() {
 		String[] names = new String[drivers.size()];
 		for (int i = 0; i < names.length; i++) {
-			names[i] = ((Sound)drivers.get(i)).getName();
+			names[i] = drivers.get(i).getName();
 		}
 		return names;
 	}

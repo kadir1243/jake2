@@ -24,8 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package jake2.qcommon.exec;
 
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestCvar {
 
@@ -38,34 +38,34 @@ public class TestCvar {
 	public void testGet() {
 		Cvar.getInstance().Set("rene", "is cool.");
 
-		Assert.assertEquals("is cool.", Cvar.getInstance().Get("rene", "default", 0).string);
+		Assertions.assertEquals("is cool.", Cvar.getInstance().Get("rene", "default", 0).string);
 	}
 
 	@Test
 	public void testGetDefault() {
 		Cvar.getInstance().Set("rene1", "is cool.");
 
-		Assert.assertEquals("default", Cvar.getInstance().Get("hello", "default", 0).string);
+		Assertions.assertEquals("default", Cvar.getInstance().Get("hello", "default", 0).string);
 	}
 
 	@Test
 	public void testGetDefaultNull() {
 		Cvar.getInstance().Set("rene2", "is cool.");
 
-		Assert.assertNull(Cvar.getInstance().Get("hello2", null, 0));
+		Assertions.assertNull(Cvar.getInstance().Get("hello2", null, 0));
 	}
 
 	@Test
 	public void testFind() {
 		Cvar.getInstance().Set("rene3", "is cool.");
 
-		Assert.assertEquals("is cool.", Cvar.getInstance().FindVar("rene3").string);
+		Assertions.assertEquals("is cool.", Cvar.getInstance().FindVar("rene3").string);
 	}
 
 	@Test
 	public void testVariableString() {
 		Cvar.getInstance().Set("rene4", "is cool.");
-		Assert.assertEquals("is cool.", Cvar.getInstance().VariableString("rene4"));
+		Assertions.assertEquals("is cool.", Cvar.getInstance().VariableString("rene4"));
 	}
 
 	@Test
@@ -73,9 +73,9 @@ public class TestCvar {
 		Cvar.getInstance().FullSet("rene5", "0.56", 0);
 
 		cvar_t rene5 = Cvar.getInstance().FindVar("rene5");
-		Assert.assertNotNull(rene5);
-		Assert.assertEquals("0.56", rene5.string);
-		Assert.assertTrue(rene5.value > 0.5f);
+		Assertions.assertNotNull(rene5);
+		Assertions.assertEquals("0.56", rene5.string);
+		Assertions.assertTrue(rene5.value > 0.5f);
 	}
 
 	@Test
@@ -84,10 +84,10 @@ public class TestCvar {
 		Cvar.getInstance().FullSet("rene6", "10.6", 0);
 
 		cvar_t rene6 = Cvar.getInstance().FindVar("rene6");
-		Assert.assertNotNull(rene6);
-		Assert.assertTrue(rene6.modified);
-		Assert.assertEquals("10.6", rene6.string);
-		Assert.assertTrue(rene6.value > 0.5f);
+		Assertions.assertNotNull(rene6);
+		Assertions.assertTrue(rene6.modified);
+		Assertions.assertEquals("10.6", rene6.string);
+		Assertions.assertTrue(rene6.value > 0.5f);
 
 	}
 }

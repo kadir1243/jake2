@@ -19,31 +19,16 @@ public abstract class ClientMessage implements NetworkMessage {
 
     public static ClientMessage parseFromBuffer(sizebuf_t buffer, int incomingSequence) {
         ClientMessageType type = ClientMessageType.fromByte((byte) buffer.readByte());
-        final ClientMessage msg;
-        switch (type) {
-            case CLC_BAD:
-                msg = new EndOfClientPacketMessage();
-                break;
-            case CLC_NOP:
+        final ClientMessage msg = switch (type) {
+            case CLC_BAD -> new EndOfClientPacketMessage();
+            case CLC_NOP ->
                 // fixme: never sent by client directly
-                msg = new NoopMessage();
-                break;
-            case CLC_USERINFO:
-                msg = new UserInfoMessage();
-                break;
-            case CLC_STRINGCMD:
-                msg = new StringCmdMessage();
-                break;
-            case CLC_MOVE:
-                msg = new MoveMessage(incomingSequence);
-                break;
-            default:
-                // todo: notify somehow in case of unexpected type
-                msg = null;
-        }
-        if (msg != null) {
-            msg.parse(buffer);
-        }
+                    new NoopMessage();
+            case CLC_USERINFO -> new UserInfoMessage();
+            case CLC_STRINGCMD -> new StringCmdMessage();
+            case CLC_MOVE -> new MoveMessage(incomingSequence);
+        };
+        msg.parse(buffer);
         return msg;
     }
 

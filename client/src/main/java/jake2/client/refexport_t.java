@@ -97,10 +97,6 @@ public interface refexport_t {
 
 	void AppActivate(boolean activate);
 	
-	/**
-	 * 
-	 *
-	 */
 	void updateScreen(Command callback);
 	
 	int apiVersion();

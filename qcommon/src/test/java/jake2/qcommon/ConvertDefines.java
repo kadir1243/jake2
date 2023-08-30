@@ -15,7 +15,7 @@ public class ConvertDefines
 {
 	public static String convertDefine(String in)
 	{
-		StringBuffer out= new StringBuffer();
+		StringBuilder out= new StringBuilder();
 
 		StringTokenizer tk= new StringTokenizer(in);
 		while (tk.hasMoreElements())
@@ -48,15 +48,11 @@ public class ConvertDefines
 	}
 
 	/********************************************/
-	public static void main(String args[])
+	public static void main(String[] args)
 	{
-		try
-		{
-			
-			System.out.println("\n".trim().length());
+		try {
 			String line;
 			String filename;
-			boolean m_doc = true;
 
 			if (args.length == 0)
 			{
@@ -64,10 +60,8 @@ public class ConvertDefines
 			}
 			else
 				filename= args[0];
-				
-			if (filename.startsWith("jake2/game/M_"))
-				m_doc = true;
-			else m_doc = false;
+
+			boolean m_doc = filename.startsWith("jake2/game/M_");
 
 			FileWriter fw= new FileWriter(filename + ".new");
 			FileReader fr= new FileReader(filename);
@@ -76,11 +70,11 @@ public class ConvertDefines
 			while (br.ready())
 			{
 				line= br.readLine();
-				if (line.indexOf("#define") != -1)
+				if (line.contains("#define"))
 					fw.write(convertDefine(line) + "\n");		
 					
 							
-				else if (m_doc && line.trim().startsWith("mframe_t ") && line.indexOf("new") == -1)
+				else if (m_doc && line.trim().startsWith("mframe_t ") && !line.contains("new"))
 				{
 					fw.write(" static " + line + " new mframe_t[] \n");
 					while (br.ready())
@@ -88,16 +82,16 @@ public class ConvertDefines
 						line= br.readLine();
 						// opening brace
 
-						if (line.indexOf("{")!=-1)
+						if (line.contains("{"))
 							fw.write(line + "\n");
 						// opening brace
-						else if (line.indexOf("}")!=-1)
+						else if (line.contains("}"))
 						{						
 							fw.write(line + "\n");
 							break;
 						
 						}
-						else if (line.trim().length()==0)
+						else if (line.trim().isEmpty())
 							fw.write("\n");
 						else
 						{
@@ -119,7 +113,7 @@ public class ConvertDefines
 					int pos2 = line.indexOf("}");
 					String seg1 = line.substring(0,pos1);
 					String seg2 = line.substring(pos1+1, pos2);
-					String seg3 = line.substring(pos2+1, line.length());
+					String seg3 = line.substring(pos2+1);
 					fw.write("static " + seg1 + " new mmove_t (" + seg2 + ")" + seg3 + "\n\n");
 					//fw.write(line);
 				}

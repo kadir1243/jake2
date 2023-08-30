@@ -475,7 +475,7 @@ public class qfiles {
 
 		int ident;
 		public int version;
-		public lump_t lumps[] = new lump_t[Defines.HEADER_LUMPS];
+		public lump_t[] lumps = new lump_t[Defines.HEADER_LUMPS];
 	}
 
 	public static class dmodel_t {
@@ -496,27 +496,14 @@ public class qfiles {
 			firstface = bb.getInt();
 			numfaces = bb.getInt();
 		}
-		public float mins[] = { 0, 0, 0 };
-		public float maxs[] = { 0, 0, 0 };
-		public float origin[] = { 0, 0, 0 }; // for sounds or lights
+		public float[] mins = { 0, 0, 0 };
+		public float[] maxs = { 0, 0, 0 };
+		public float[] origin = { 0, 0, 0 }; // for sounds or lights
 		public int headnode;
 		public int firstface, numfaces; // submodels just draw faces
 		// without walking the bsp tree
 
 		public static int SIZE = 3 * 4 + 3 * 4 + 3 * 4 + 4 + 8;
-	}
-	
-	public static class dvertex_t {
-		
-		public static final int SIZE = 3 * 4; // 3 mal 32 bit float 
-		
-		public float[] point = { 0, 0, 0 };
-		
-		public dvertex_t(ByteBuffer b) {
-			point[0] = b.getFloat();
-			point[1] = b.getFloat();
-			point[2] = b.getFloat();
-		}
 	}
 
 
@@ -534,7 +521,7 @@ public class qfiles {
 			type = (bb.getInt());
 		}
 
-		public float normal[] = { 0, 0, 0 };
+		public float[] normal = { 0, 0, 0 };
 		public float dist;
 		public int type; // PLANE_X - PLANE_ANYZ ?remove? trivial to regenerate
 
@@ -563,10 +550,10 @@ public class qfiles {
 		}
 
 		public int planenum;
-		public int children[] = { 0, 0 };
+		public int[] children = { 0, 0 };
 		// negative numbers are -(leafs+1), not nodes
-		public short mins[] = { 0, 0, 0 }; // for frustom culling
-		public short maxs[] = { 0, 0, 0 };
+		public short[] mins = { 0, 0, 0 }; // for frustom culling
+		public short[] maxs = { 0, 0, 0 };
 
 		/*
 		unsigned short	firstface;
@@ -583,12 +570,7 @@ public class qfiles {
 
 	// note that edge 0 is never used, because negative edge nums are used for
 	// counterclockwise use of the edge in a face
-	
-	public static class dedge_t {
-		// unsigned short v[2];
-		int v[] = { 0, 0 };
-	}
-	
+
 	public static class dface_t {
 		
 		public static final int SIZE =
@@ -605,7 +587,7 @@ public class qfiles {
 		public short texinfo;
 
 		// lighting info
-		public byte styles[] = new byte[Defines.MAXLIGHTMAPS];
+		public byte[] styles = new byte[Defines.MAXLIGHTMAPS];
 		public int lightofs; // start of [numstyles*surfsize] samples
 		
 		public dface_t(ByteBuffer b) {
@@ -653,8 +635,8 @@ public class qfiles {
 		public short cluster;
 		public short area;
 
-		public short mins[] = { 0, 0, 0 }; // for frustum culling
-		public short maxs[] = { 0, 0, 0 };
+		public short[] mins = { 0, 0, 0 }; // for frustum culling
+		public short[] maxs = { 0, 0, 0 };
 
 		public int firstleafface; // unsigned short
 		public int numleaffaces; // unsigned short
@@ -718,7 +700,7 @@ public class qfiles {
 		}
 
 		public int numclusters;
-		public int bitofs[][] = new int[8][2]; // bitofs[numclusters][2]	
+		public int[][] bitofs;
 	}
 	
 	// each area has a list of portals that lead into other areas

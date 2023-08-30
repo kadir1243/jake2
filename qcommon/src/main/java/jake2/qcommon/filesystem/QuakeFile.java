@@ -66,14 +66,14 @@ public class QuakeFile extends RandomAccessFile {
     }
 
     /** Writes a Vector to a RandomAccessFile. */
-    public void writeVector(float v[]) throws IOException {
+    public void writeVector(float[] v) throws IOException {
         for (int n = 0; n < 3; n++)
             writeFloat(v[n]);
     }
 
     /** Writes a Vector to a RandomAccessFile. */
     public float[] readVector() throws IOException {
-        float res[] = { 0, 0, 0 };
+        float[] res = { 0, 0, 0 };
         for (int n = 0; n < 3; n++)
             res[n] = readFloat();
 
@@ -90,7 +90,7 @@ public class QuakeFile extends RandomAccessFile {
         if (len == 0)
             return "";
 
-        byte bb[] = new byte[len];
+        byte[] bb = new byte[len];
 
         super.read(bb, 0, len);
 
@@ -105,7 +105,7 @@ public class QuakeFile extends RandomAccessFile {
         }
 
         writeInt(s.length());
-        if (s.length() != 0)
+        if (!s.isEmpty())
             writeBytes(s);
     }
 

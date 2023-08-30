@@ -214,8 +214,6 @@ public final class FS extends Globals {
      * @return null in case of error
      */
     public static QuakeFile FOpenFile(String filename) {
-
-
         try {
             // used for tools
             // todo: unify with other code
@@ -569,7 +567,7 @@ public final class FS extends Globals {
         String dir = fs_userdir;
 
         String name;
-        if (dir != null && dir.length() > 0) {
+        if (dir != null && !dir.isEmpty()) {
             name = dir + "/autoexec.cfg";
         } else {
             name = fs_basedir.string + '/' + Globals.BASEQ2 + "/autoexec.cfg";

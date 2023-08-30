@@ -98,5 +98,3 @@ data class Vector3f(val x: Float, val y: Float, val z: Float) {
         return floatArrayOf(-pitch, yaw, 0f)
     }
 }
-
-fun FloatArray.toVector3f() = Vector3f(this[0], this[1], this[2])

@@ -10,7 +10,6 @@ import jake2.game.components.MoveInfo
 import jake2.game.components.getComponent
 import jake2.qcommon.Defines
 import jake2.qcommon.math.Vector3f
-import jake2.qcommon.math.toVector3f
 import jake2.qcommon.util.Math3D
 import kotlin.math.floor
 
@@ -29,7 +28,7 @@ fun startMovement(self: SubgameEntity, destination: Vector3f, endFunction: EntTh
 
     val moveInfo: MoveInfo = self.getComponent()!!
 
-    val delta = destination - self.s.origin.toVector3f()
+    val delta = destination - Vector3f(self.s.origin)
     moveInfo.remaining_distance = delta.length()
     moveInfo.dir = delta.normalize()
     moveInfo.endfunc = endFunction

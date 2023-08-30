@@ -3,7 +3,7 @@ package jake2.game.components
 import jake2.game.GameExportsImpl
 import jake2.game.SubgameEntity
 import jake2.qcommon.Defines
-import jake2.qcommon.lerpI
+import jake2.qcommon.MathLib
 
 inline fun <reified T> SubgameEntity.getComponent(): T? {
     return this.components[T::class.java.name] as? T
@@ -48,7 +48,7 @@ data class LightRamp(
         if (fraction > 1) {
             fraction = 1f
         }
-        return lerpI(start, end, fraction)
+        return MathLib.lerp(start, end, fraction)
     }
 
     fun toggle(currentTime: Float) {

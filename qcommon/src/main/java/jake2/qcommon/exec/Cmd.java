@@ -37,8 +37,7 @@ import java.util.*;
  */
 public final class Cmd {
 
-    private final static Command List_f = (List<String> args) -> {
-
+    private final static Command List_f = args -> {
         for (cmd_function_t cmd : Cmd.cmd_functions.values()) {
             Com.Printf(cmd.name + '\n');
         }
@@ -46,7 +45,7 @@ public final class Cmd {
         Com.Printf(Cmd.cmd_functions.size() + " commands\n");
     };
 
-    private final static Command Exec_f = (List<String> args) -> {
+    private final static Command Exec_f = args -> {
         if (args.size() != 2) {
             Com.Printf("exec <filename> : execute a script file\n");
             return;
@@ -234,7 +233,7 @@ public final class Cmd {
 
     public static void AddCommand(String cmd_name, Command function, boolean replace) {
         // fail if the command is a variable name
-        if ((Cvar.getInstance().VariableString(cmd_name)).length() > 0) {
+        if (!(Cvar.getInstance().VariableString(cmd_name)).isEmpty()) {
             Com.Printf("Cmd_AddCommand: " + cmd_name + " already defined as a var\n");
             return;
         }
@@ -292,7 +291,7 @@ public final class Cmd {
         List<String> args = TokenizeString(text, true);
 
         // execute the command line
-        if (args.size() == 0)
+        if (args.isEmpty())
             return; // no tokens
 
         // check functions

@@ -408,20 +408,12 @@ public abstract class Main extends Base {
 					R_DrawNullModel();
 					continue;
 				}
-				switch (currentmodel.type) {
-					case MD2:
-						R_DrawAliasModel(currententity);
-						break;
-					case BRUSH:
-						R_DrawBrushModel(currententity);
-						break;
-					case SPRITE:
-						R_DrawSpriteModel(currententity);
-						break;
-					default :
-						Com.Error(Defines.ERR_DROP, "Bad modeltype");
-						break;
-				}
+                switch (currentmodel.type) {
+                    case MD2 -> R_DrawAliasModel(currententity);
+                    case BRUSH -> R_DrawBrushModel(currententity);
+                    case SPRITE -> R_DrawSpriteModel(currententity);
+                    default -> Com.Error(Defines.ERR_DROP, "Bad modeltype");
+                }
 			}
 		}
 		// draw transparent entities
@@ -442,20 +434,12 @@ public abstract class Main extends Base {
 					R_DrawNullModel();
 					continue;
 				}
-				switch (currentmodel.type) {
-					case MD2:
-						R_DrawAliasModel(currententity);
-						break;
-					case BRUSH:
-						R_DrawBrushModel(currententity);
-						break;
-					case SPRITE:
-						R_DrawSpriteModel(currententity);
-						break;
-					default :
-						Com.Error(Defines.ERR_DROP, "Bad modeltype");
-						break;
-				}
+                switch (currentmodel.type) {
+                    case MD2 -> R_DrawAliasModel(currententity);
+                    case BRUSH -> R_DrawBrushModel(currententity);
+                    case SPRITE -> R_DrawSpriteModel(currententity);
+                    default -> Com.Error(Defines.ERR_DROP, "Bad modeltype");
+                }
 			}
 		}
 		gl.glDepthMask(true); // back to writing
@@ -669,8 +653,7 @@ public abstract class Main extends Base {
 			}
 		}
 
-		for (int i = 0; i < 4; i++)
-			v_blend[i] = r_newrefdef.blend[i];
+        System.arraycopy(r_newrefdef.blend, 0, v_blend, 0, 4);
 
 		c_brush_polys = 0;
 		c_alias_polys = 0;
@@ -1113,25 +1096,25 @@ public abstract class Main extends Base {
 		String renderer_buffer = gl_config.renderer_string.toLowerCase();
 		String vendor_buffer = gl_config.vendor_string.toLowerCase();
 
-		if (renderer_buffer.indexOf("voodoo") >= 0) {
-			if (renderer_buffer.indexOf("rush") < 0)
+		if (renderer_buffer.contains("voodoo")) {
+			if (!renderer_buffer.contains("rush"))
 				gl_config.renderer = GL_RENDERER_VOODOO;
 			else
 				gl_config.renderer = GL_RENDERER_VOODOO_RUSH;
 		}
-		else if (vendor_buffer.indexOf("sgi") >= 0)
+		else if (vendor_buffer.contains("sgi"))
 			gl_config.renderer = GL_RENDERER_SGI;
-		else if (renderer_buffer.indexOf("permedia") >= 0)
+		else if (renderer_buffer.contains("permedia"))
 			gl_config.renderer = GL_RENDERER_PERMEDIA2;
-		else if (renderer_buffer.indexOf("glint") >= 0)
+		else if (renderer_buffer.contains("glint"))
 			gl_config.renderer = GL_RENDERER_GLINT_MX;
-		else if (renderer_buffer.indexOf("glzicd") >= 0)
+		else if (renderer_buffer.contains("glzicd"))
 			gl_config.renderer = GL_RENDERER_REALIZM;
-		else if (renderer_buffer.indexOf("gdi") >= 0)
+		else if (renderer_buffer.contains("gdi"))
 			gl_config.renderer = GL_RENDERER_MCD;
-		else if (renderer_buffer.indexOf("pcx2") >= 0)
+		else if (renderer_buffer.contains("pcx2"))
 			gl_config.renderer = GL_RENDERER_PCX2;
-		else if (renderer_buffer.indexOf("verite") >= 0)
+		else if (renderer_buffer.contains("verite"))
 			gl_config.renderer = GL_RENDERER_RENDITION;
 		else
 			gl_config.renderer = GL_RENDERER_OTHER;
@@ -1165,10 +1148,7 @@ public abstract class Main extends Base {
 		}
 
 		if ((gl_config.renderer & GL_RENDERER_3DLABS) != 0) {
-			if (gl_3dlabs_broken.value != 0.0f)
-				gl_config.allow_cds = false;
-			else
-				gl_config.allow_cds = true;
+            gl_config.allow_cds = gl_3dlabs_broken.value == 0.0f;
 		}
 		else {
 			gl_config.allow_cds = true;
@@ -1182,14 +1162,11 @@ public abstract class Main extends Base {
 		/*
 		** grab extensions
 		*/
-		if (gl_config.extensions_string.indexOf("GL_EXT_compiled_vertex_array") >= 0
-			|| gl_config.extensions_string.indexOf("GL_SGI_compiled_vertex_array") >= 0) {
+		if (gl_config.extensions_string.contains("GL_EXT_compiled_vertex_array")
+			|| gl_config.extensions_string.contains("GL_SGI_compiled_vertex_array")) {
 			Com.Printf(Defines.PRINT_ALL, "...enabling GL_EXT_compiled_vertex_array\n");
 			//		 qgl.glLockArraysEXT = ( void * ) qwglGetProcAddress( "glLockArraysEXT" );
-			if (gl_ext_compiled_vertex_array.value != 0.0f)
-				qglLockArraysEXT = true;
-			else
-				qglLockArraysEXT = false;
+            qglLockArraysEXT = gl_ext_compiled_vertex_array.value != 0.0f;
 			//		 qgl.glUnlockArraysEXT = ( void * ) qwglGetProcAddress( "glUnlockArraysEXT" );
 			//qglUnlockArraysEXT = true;
 		}
@@ -1198,7 +1175,7 @@ public abstract class Main extends Base {
 			qglLockArraysEXT = false;
 		}
 
-		if (gl_config.extensions_string.indexOf("WGL_EXT_swap_control") >= 0) {
+		if (gl_config.extensions_string.contains("WGL_EXT_swap_control")) {
 			qwglSwapIntervalEXT = true;
 			Com.Printf(Defines.PRINT_ALL, "...enabling WGL_EXT_swap_control\n");
 		} else {
@@ -1206,7 +1183,7 @@ public abstract class Main extends Base {
 			Com.Printf(Defines.PRINT_ALL, "...WGL_EXT_swap_control not found\n");
 		}
 
-		if (gl_config.extensions_string.indexOf("GL_EXT_point_parameters") >= 0) {
+		if (gl_config.extensions_string.contains("GL_EXT_point_parameters")) {
 			if (gl_ext_pointparameters.value != 0.0f) {
 				//			 qgl.glPointParameterfEXT = ( void (APIENTRY *)( GLenum, GLfloat ) ) qwglGetProcAddress( "glPointParameterfEXT" );
 				qglPointParameterfEXT = true;
@@ -1242,8 +1219,8 @@ public abstract class Main extends Base {
 		// #endif
 
 		if (!qglColorTableEXT
-			&& gl_config.extensions_string.indexOf("GL_EXT_paletted_texture") >= 0
-			&& gl_config.extensions_string.indexOf("GL_EXT_shared_texture_palette") >= 0) {
+			&& gl_config.extensions_string.contains("GL_EXT_paletted_texture")
+			&& gl_config.extensions_string.contains("GL_EXT_shared_texture_palette")) {
 			if (gl_ext_palettedtexture.value != 0.0f) {
 				Com.Printf(Defines.PRINT_ALL, "...using GL_EXT_shared_texture_palette\n");
 				qglColorTableEXT = false; // true; TODO jogl bug
@@ -1257,7 +1234,7 @@ public abstract class Main extends Base {
 			Com.Printf(Defines.PRINT_ALL, "...GL_EXT_shared_texture_palette not found\n");
 		}
 
-		if (gl_config.extensions_string.indexOf("GL_ARB_multitexture") >= 0) {
+		if (gl_config.extensions_string.contains("GL_ARB_multitexture")) {
 			// check if the extension realy exists
 			try {
 				gl.glClientActiveTextureARB(GL_TEXTURE0_ARB);
