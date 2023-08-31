@@ -51,7 +51,7 @@ public class Lib {
 	
 	/** Converts a vector to a beatiful string. */
 	public static String vtofsbeaty(float[] v) {
-		return Com.sprintf("%8.2f %8.2f %8.2f", new Vargs().add(v[0]).add(v[1]).add(v[2]));
+		return String.format("%8.2f %8.2f %8.2f", v[0], v[1], v[2]);
 	}
 	
 	/** Like in  libc. */
@@ -101,7 +101,7 @@ public class Lib {
 	/** Converts a string to a vector. Needs improvement. */
 	public static float[] atov(String v) {
 		float[] res = { 0, 0, 0 };
-		String strres[] = v.split(" ");
+		String[] strres = v.split(" ");
 		for (int n=0; n < 3 && n < strres.length; n++)
 		{
 			res[n] = atof(strres[n]);
@@ -110,7 +110,7 @@ public class Lib {
 	}
 
 	/** Like in libc. */
-	public static int strlen(char in[]) {
+	public static int strlen(char[] in) {
 		for (int i = 0; i < in.length; i++)
 			if (in[i] == 0)
 				return i;
@@ -118,7 +118,7 @@ public class Lib {
 	}
 	
 	/** Like in libc. */
-	public static int strlen(byte in[]) {
+	public static int strlen(byte[] in) {
 		for (int i = 0; i < in.length; i++)
 			if (in[i] == 0)
 				return i;
@@ -126,8 +126,7 @@ public class Lib {
 	}
 
 	/** Converts memory to a memory dump string. */
-	public static String hexdumpfile(ByteBuffer bb, int len) throws IOException {
-	
+	public static String hexdumpfile(ByteBuffer bb, int len) {
 		ByteBuffer bb1 = bb.slice();
 	
 		byte[] buf = new byte[len];
@@ -187,13 +186,13 @@ public class Lib {
 	}
 	
 	/** Prints a vector to the quake console. */
-	public static void printv(String in, float arr[]) {
+	public static void printv(String in, float[] arr) {
 		for (int n = 0; n < arr.length; n++) {
 			Com.Println(in + "[" + n + "]: " + arr[n]);
 		}
 	}
 	
-	static final byte nullfiller[] = new byte[8192];
+	static final byte[] nullfiller = new byte[8192];
 		
 	/** Like in libc. */
 	public static void fwriteString(String s, int len, RandomAccessFile f) throws IOException {
@@ -329,7 +328,10 @@ public class Lib {
 	public static String CtoJava(byte[] old, int offset, int maxLenght) {
 		if (old.length == 0 || old[0] == 0) return "";
 	    int i;
-	    for (i = offset; (i - offset) < maxLenght && old[i] != 0; i++);
+        i = offset;
+        while ((i - offset) < maxLenght && old[i] != 0) {
+            i++;
+        }
 		return new String(old, offset, i - offset);
 	}
 	

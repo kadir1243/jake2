@@ -29,7 +29,7 @@ public class M_Flash {
     //	   this file is included in both the game dll and quake2,
     //	   the game needs it to source shot locations, the client
     //	   needs it to position muzzle flashes
-    public static float monster_flash_offset[][] = {
+    public static float[][] monster_flash_offset = {
     //		flash 0 is not used
             { 0.0f, 0.0f, 0.0f },
 

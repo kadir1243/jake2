@@ -34,12 +34,9 @@ import java.nio.ByteBuffer;
  * @author cwei
  */
 public final class DummyDriver implements Sound {
+	public static final Sound INSTANCE = new DummyDriver();
 
-	static {
-		S.register(new DummyDriver());
-	};
-	
-	private DummyDriver() {
+    private DummyDriver() {
 	}
 
 	/* (non-Javadoc)

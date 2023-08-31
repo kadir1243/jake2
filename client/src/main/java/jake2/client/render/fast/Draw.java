@@ -332,7 +332,7 @@ public abstract class Draw extends Image {
 		{
 			//int[] image32 = new int[256*256];
 			image32.clear();
-			int destIndex = 0;
+			int destIndex;
 
 			for (i=0 ; i<trows ; i++)
 			{
@@ -355,7 +355,7 @@ public abstract class Draw extends Image {
 		{
 			//byte[] image8 = new byte[256*256];
 			image8.clear();
-			int destIndex = 0;;
+			int destIndex;
 
 			for (i=0 ; i<trows ; i++)
 			{

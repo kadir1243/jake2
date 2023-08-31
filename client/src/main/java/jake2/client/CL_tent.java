@@ -26,7 +26,7 @@
 package jake2.client;
 
 import jake2.client.render.model_t;
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.client.sound.sfx_t;
 import jake2.qcommon.*;
 import jake2.qcommon.network.messages.server.*;
@@ -224,33 +224,33 @@ public class CL_tent {
         // PMM - version stuff
         //		Com_Printf ("%s\n", ROGUE_VERSION_STRING);
         // PMM
-        cl_sfx_ric1 = S.RegisterSound("world/ric1.wav");
-        cl_sfx_ric2 = S.RegisterSound("world/ric2.wav");
-        cl_sfx_ric3 = S.RegisterSound("world/ric3.wav");
-        cl_sfx_lashit = S.RegisterSound("weapons/lashit.wav");
-        cl_sfx_spark5 = S.RegisterSound("world/spark5.wav");
-        cl_sfx_spark6 = S.RegisterSound("world/spark6.wav");
-        cl_sfx_spark7 = S.RegisterSound("world/spark7.wav");
-        cl_sfx_railg = S.RegisterSound("weapons/railgf1a.wav");
-        cl_sfx_rockexp = S.RegisterSound("weapons/rocklx1a.wav");
-        cl_sfx_grenexp = S.RegisterSound("weapons/grenlx1a.wav");
-        cl_sfx_watrexp = S.RegisterSound("weapons/xpld_wat.wav");
+        cl_sfx_ric1 = SoundSystem.RegisterSound("world/ric1.wav");
+        cl_sfx_ric2 = SoundSystem.RegisterSound("world/ric2.wav");
+        cl_sfx_ric3 = SoundSystem.RegisterSound("world/ric3.wav");
+        cl_sfx_lashit = SoundSystem.RegisterSound("weapons/lashit.wav");
+        cl_sfx_spark5 = SoundSystem.RegisterSound("world/spark5.wav");
+        cl_sfx_spark6 = SoundSystem.RegisterSound("world/spark6.wav");
+        cl_sfx_spark7 = SoundSystem.RegisterSound("world/spark7.wav");
+        cl_sfx_railg = SoundSystem.RegisterSound("weapons/railgf1a.wav");
+        cl_sfx_rockexp = SoundSystem.RegisterSound("weapons/rocklx1a.wav");
+        cl_sfx_grenexp = SoundSystem.RegisterSound("weapons/grenlx1a.wav");
+        cl_sfx_watrexp = SoundSystem.RegisterSound("weapons/xpld_wat.wav");
         // RAFAEL
         // cl_sfx_plasexp = S.RegisterSound ("weapons/plasexpl.wav");
-        S.RegisterSound("player/land1.wav");
+        SoundSystem.RegisterSound("player/land1.wav");
 
-        S.RegisterSound("player/fall2.wav");
-        S.RegisterSound("player/fall1.wav");
+        SoundSystem.RegisterSound("player/fall2.wav");
+        SoundSystem.RegisterSound("player/fall1.wav");
 
         for (i = 0; i < 4; i++) {
             //Com_sprintf (name, sizeof(name), "player/step%i.wav", i+1);
             name = "player/step" + (i + 1) + ".wav";
-            cl_sfx_footsteps[i] = S.RegisterSound(name);
+            cl_sfx_footsteps[i] = SoundSystem.RegisterSound(name);
         }
 
         //	  PGM
-        cl_sfx_lightning = S.RegisterSound("weapons/tesla.wav");
-        cl_sfx_disrexp = S.RegisterSound("weapons/disrupthit.wav");
+        cl_sfx_lightning = SoundSystem.RegisterSound("weapons/tesla.wav");
+        cl_sfx_disrexp = SoundSystem.RegisterSound("weapons/disrupthit.wav");
         // version stuff
         //		sprintf (name, "weapons/sound%d.wav", ROGUE_VERSION_ID);
         //		if (name[0] == 'w')
@@ -763,11 +763,11 @@ public class CL_tent {
                         // impact sound
                         int cnt = Lib.rand() & 15;
                         if (cnt == 1)
-                            S.StartSound(m.position, 0, 0, cl_sfx_ric1, 1, Defines.ATTN_NORM,0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_ric1, 1, Defines.ATTN_NORM,0);
                         else if (cnt == 2)
-                            S.StartSound(m.position, 0, 0, cl_sfx_ric2, 1, Defines.ATTN_NORM,0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_ric2, 1, Defines.ATTN_NORM,0);
                         else if (cnt == 3)
-                            S.StartSound(m.position, 0, 0, cl_sfx_ric3, 1, Defines.ATTN_NORM,0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_ric3, 1, Defines.ATTN_NORM,0);
                     }
 
                     break;
@@ -778,7 +778,7 @@ public class CL_tent {
                     else
                         CL_fx.ParticleEffect(m.position, m.direction, 0xb0, 40);
                     //FIXME : replace or remove this sound
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_SHOTGUN:
@@ -808,7 +808,7 @@ public class CL_tent {
                     ex.lightcolor[1] = 1;
                     ex.ent.model = cl_mod_explode;
                     ex.frames = 4;
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
                 case TE_GREENBLOOD:
                     CL_fx.ParticleEffect2(m.position, m.direction, 0xdf, 30);
@@ -859,17 +859,17 @@ public class CL_tent {
                     }
                     ex1.ent.model = cl_mod_explode;
                     ex1.frames = 4;
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_HEATBEAM_SPARKS:
                     CL_newfx.ParticleSteamEffect(m.position, m.direction, 8 & 0xff, 50, 60);
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_HEATBEAM_STEAM:
                     CL_newfx.ParticleSteamEffect(m.position, m.direction, 0xe0, 20, 60);
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
                 case TE_MOREBLOOD:
                     CL_fx.ParticleEffect(m.position, m.direction, 0xe8, 250);
@@ -877,7 +877,7 @@ public class CL_tent {
                 case TE_ELECTRIC_SPARKS:
                     CL_fx.ParticleEffect(m.position, m.direction, 0x75, 40);
                     //FIXME : replace or remove this sound
-                    S.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_lashit, 1, Defines.ATTN_NORM, 0);
                     break;
             }
         } else if (msg instanceof TrailTEMessage) {
@@ -888,7 +888,7 @@ public class CL_tent {
                     break;
                 case TE_RAILTRAIL:
                     CL_fx.RailTrail(m.position, m.destination);
-                    S.StartSound(m.destination, 0, 0, cl_sfx_railg, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.destination, 0, 0, cl_sfx_railg, 1, Defines.ATTN_NORM, 0);
                     break;
                 case TE_BLUEHYPERBLASTER:
                     CL_fx.BlasterParticles(m.position, m.destination);
@@ -915,11 +915,11 @@ public class CL_tent {
                     if (m.param == Defines.SPLASH_SPARKS) {
                         int r = Lib.rand() & 3;
                         if (r == 0)
-                            S.StartSound(m.position, 0, 0, cl_sfx_spark5, 1, Defines.ATTN_STATIC, 0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_spark5, 1, Defines.ATTN_STATIC, 0);
                         else if (r == 1)
-                            S.StartSound(m.position, 0, 0, cl_sfx_spark6, 1, Defines.ATTN_STATIC, 0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_spark6, 1, Defines.ATTN_STATIC, 0);
                         else
-                            S.StartSound(m.position, 0, 0, cl_sfx_spark7, 1, Defines.ATTN_STATIC, 0);
+                            SoundSystem.StartSound(m.position, 0, 0, cl_sfx_spark7, 1, Defines.ATTN_STATIC, 0);
                     }
                     break;
                 case TE_LASER_SPARKS:
@@ -966,9 +966,9 @@ public class CL_tent {
                     ex.ent.angles[1] = Lib.rand() % 360;
                     CL_fx.ExplosionParticles(m.position);
                     if (m.style == Defines.TE_GRENADE_EXPLOSION_WATER)
-                        S.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
                     else
-                        S.StartSound(m.position, 0, 0, cl_sfx_grenexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_grenexp, 1, Defines.ATTN_NORM, 0);
                     break;
                 case TE_PLASMA_EXPLOSION:
                     explosion_t plasma = AllocExplosion();
@@ -986,7 +986,7 @@ public class CL_tent {
                         plasma.baseframe = 15;
                     plasma.frames = 15;
                     CL_fx.ExplosionParticles(m.position);
-                    S.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_EXPLOSION1:
@@ -1015,9 +1015,9 @@ public class CL_tent {
                     if (m.style != Defines.TE_EXPLOSION1_BIG && m.style != Defines.TE_EXPLOSION1_NP) // PMM
                         CL_fx.ExplosionParticles(m.position); // PMM
                     if (m.style == Defines.TE_ROCKET_EXPLOSION_WATER)
-                        S.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
                     else
-                        S.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_BFG_EXPLOSION:
@@ -1041,7 +1041,7 @@ public class CL_tent {
                     break;
                 case TE_BOSSTPORT:
                     CL_fx.BigTeleportParticles(m.position);
-                    S.StartSound(m.position, 0, 0, S.RegisterSound("misc/bigtele.wav"), 1, Defines.ATTN_NONE, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, SoundSystem.RegisterSound("misc/bigtele.wav"), 1, Defines.ATTN_NONE, 0);
                     break;
 
                 case TE_PLAIN_EXPLOSION:
@@ -1061,9 +1061,9 @@ public class CL_tent {
                     ex2.frames = 15;
                     // fixme: unreachable
                     if (msg.style == Defines.TE_ROCKET_EXPLOSION_WATER)
-                        S.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_watrexp, 1, Defines.ATTN_NORM, 0);
                     else
-                        S.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
+                        SoundSystem.StartSound(m.position, 0, 0, cl_sfx_rockexp, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_CHAINFIST_SMOKE:
@@ -1073,7 +1073,7 @@ public class CL_tent {
                 case TE_TRACKER_EXPLOSION:
                     CL_newfx.ColorFlash(m.position, 0, 150, -1, -1, -1);
                     CL_newfx.ColorExplosionParticles(m.position, 0, 1);
-                    S.StartSound(m.position, 0, 0, cl_sfx_disrexp, 1, Defines.ATTN_NORM, 0);
+                    SoundSystem.StartSound(m.position, 0, 0, cl_sfx_disrexp, 1, Defines.ATTN_NORM, 0);
                     break;
 
                 case TE_TELEPORT_EFFECT:

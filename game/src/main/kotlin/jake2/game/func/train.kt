@@ -19,7 +19,7 @@ import jake2.game.setSpawnFlag
 import jake2.game.unsetSpawnFlag
 import jake2.qcommon.Defines
 import jake2.qcommon.Globals
-import jake2.qcommon.math.Vector3f
+import jake2.qcommon.util.Vector3f
 import jake2.qcommon.util.Lib
 import jake2.qcommon.util.Math3D
 

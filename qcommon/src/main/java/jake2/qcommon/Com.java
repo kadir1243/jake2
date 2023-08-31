@@ -28,23 +28,24 @@ package jake2.qcommon;
 import jake2.qcommon.exec.Cmd;
 import jake2.qcommon.sys.Sys;
 import jake2.qcommon.util.PrintfFormat;
-import jake2.qcommon.util.Vargs;
+import org.jetbrains.annotations.Contract;
 
 /**
  * Common print related functions including redirection
  *
  */
-public final class Com
-{
-
+public final class Com {
     public static String debugContext = "";
     private static String _debugContext = "";
     
 	public static void Printf(int print_level, String fmt) {
-		Printf(print_level, fmt, null);
+		if (print_level == Defines.PRINT_ALL)
+			Printf(fmt);
+		else
+			DPrintf(fmt);
 	}
 
-	public static void Printf(int print_level, String fmt, Vargs vargs) {
+	public static void Printf(int print_level, String fmt, Object... vargs) {
 		if (print_level == Defines.PRINT_ALL)
 			Printf(fmt, vargs);
 		else
@@ -75,8 +76,6 @@ public final class Com
 
 	// Detect recursion during shutdown
 	private static boolean recursive= false;
-
-	private static String msg= "";
 
 	// helper class to replace the pointer-pointer
 	@Deprecated
@@ -137,7 +136,7 @@ public final class Com
 		}
 
 		public int index;
-		public char data[];
+		public char[] data;
 		private int length;
 
 		char skipwhites()
@@ -233,20 +232,14 @@ public final class Com
 		return new String(com_token, 0, len);
 	}
 
-	public static void Error(int code, String fmt) throws longjmpException
-	{
-		Error(code, fmt, null);
-	}
-
-	public static void Error(int code, String fmt, Vargs vargs) throws longjmpException
-	{
-		if (recursive)
-		{
-			Sys.Error("recursive error after: " + msg);
+	private static String lastError;
+	public static void Error(int code, String fmt) throws longjmpException {
+		if (recursive) {
+			Sys.Error("recursive error after: " + lastError);
 		}
-		recursive= true;
+		recursive = true;
 
-		msg= sprintf(fmt, vargs);
+        lastError = fmt;
 
 		if (code == Defines.ERR_DISCONNECT)
 		{
@@ -256,40 +249,59 @@ public final class Com
 		}
 		else if (code == Defines.ERR_DROP)
 		{
-			Com.Printf("********************\nERROR: " + msg + "\n********************\n");
-			Cmd.ExecuteFunction("sv_shutdown", "Server crashed: " + msg, "false");
+			Com.Printf("********************\nERROR: " + fmt + "\n********************\n");
+			Cmd.ExecuteFunction("sv_shutdown", "Server crashed: " + fmt, "false");
 			Cmd.ExecuteFunction("cl_drop");
 			recursive= false;
 			throw new longjmpException();
 		}
 		else
 		{
-			Cmd.ExecuteFunction("sv_shutdown", "Server fatal crashed: " + msg, "false");
+			Cmd.ExecuteFunction("sv_shutdown", "Server fatal crashed: " + fmt, "false");
 			Cmd.ExecuteFunction("cl_shutdown");
 		}
 
-		Sys.Error(msg);
+		Sys.Error(fmt);
 	}
 
 	public static void DPrintf(String fmt)
 	{
 	    _debugContext = debugContext;
-		DPrintf(fmt, null);
+		if (Globals.developer == null || Globals.developer.value == 0)
+			return; // don't confuse non-developers with techie stuff...
+		_debugContext = debugContext;
+		Printf(fmt);
 		_debugContext = "";
 	}
 	
 	public static void dprintln(String fmt)
 	{
-		DPrintf(_debugContext + fmt + "\n", null);
+		if (Globals.developer == null || Globals.developer.value == 0)
+			return; // don't confuse non-developers with techie stuff...
+		_debugContext = debugContext;
+		Printf(_debugContext + fmt + "\n");
+		_debugContext="";
 	}
 
-	public static void Printf(String fmt)
-	{
-		Printf(_debugContext + fmt, null);
+	public static void Printf(String fmt) {
+		String msg = _debugContext + fmt;
+		if (rd_flusher != null) {
+			if ((msg.length() + rd_buffer.length()) > (rd_buffersize - 1)) {
+				rd_flusher.rd_flush(rd_buffer);
+				rd_buffer.setLength(0);
+			}
+			rd_buffer.append(msg);
+			return;
+		}
+
+		Cmd.ExecuteFunction("console_print", msg);
+
+		// also echo to debugging console
+		// todo: use proper logging
+		System.out.print(msg);
 	}
 
-	public static void DPrintf(String fmt, Vargs vargs)
-	{
+	public static void DPrintf(String fmt, Object... vargs) {
 		if (Globals.developer == null || Globals.developer.value == 0)
 			return; // don't confuse non-developers with techie stuff...
 		_debugContext = debugContext;
@@ -297,14 +309,10 @@ public final class Com
 		_debugContext="";
 	}
 
-	/** Prints out messages, which can also be redirected to a remote client. */
-	public static void Printf(String fmt, Vargs vargs)
-	{
+	public static void Printf(String fmt, Object... vargs) {
 		String msg= sprintf(_debugContext + fmt, vargs);
-		if (rd_flusher != null)
-		{
-			if ((msg.length() + rd_buffer.length()) > (rd_buffersize - 1))
-			{
+		if (rd_flusher != null) {
+			if ((msg.length() + rd_buffer.length()) > (rd_buffersize - 1)) {
 				rd_flusher.rd_flush(rd_buffer);
 				rd_buffer.setLength(0);
 			}
@@ -324,12 +332,13 @@ public final class Com
 		Printf(_debugContext + fmt + "\n");
 	}
 
+	@Contract("_, null -> _")
 	@Deprecated
-	public static String sprintf(String fmt, Vargs vargs) {
-		if (vargs == null || vargs.size() == 0) {
+	public static String sprintf(String fmt, Object... vargs) {
+		if (vargs == null || vargs.length == 0) {
 			return fmt;
 		} else {
-			return new PrintfFormat(fmt).sprintf(vargs.toArray());
+			return new PrintfFormat(fmt).sprintf(vargs);
 		}
 	}
 

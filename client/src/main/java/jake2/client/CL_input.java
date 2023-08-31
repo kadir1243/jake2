@@ -407,7 +407,7 @@ public class CL_input {
 		// save this command off for prediction
 		int cmdIndex = ClientGlobals.cls.netchan.outgoing_sequence & (Defines.CMD_BACKUP - 1);
 		usercmd_t cmd = ClientGlobals.cl.cmds[cmdIndex];
-		ClientGlobals.cl.cmd_time[cmdIndex] = (int) ClientGlobals.cls.realtime; // for netgraph
+		ClientGlobals.cl.cmd_time[cmdIndex] = ClientGlobals.cls.realtime; // for netgraph
 															 // ping calculation
 
 		// fill the cmd
@@ -419,7 +419,7 @@ public class CL_input {
 			return;
 
 		if (ClientGlobals.cls.state == Defines.ca_connected) {
-			if (ClientGlobals.cls.netchan.reliablePending.size() != 0 || Globals.curtime - ClientGlobals.cls.netchan.last_sent > 1000)
+			if (!ClientGlobals.cls.netchan.reliablePending.isEmpty() || Globals.curtime - ClientGlobals.cls.netchan.last_sent > 1000)
 				ClientGlobals.cls.netchan.transmit(null);
 			return;
 		}

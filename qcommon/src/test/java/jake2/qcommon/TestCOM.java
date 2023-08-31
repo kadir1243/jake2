@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestCOM {
 
     @Test
@@ -48,7 +50,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("testrene", "=", "ein mal eins", ";", "a=3", ""), result);
+        assertEquals(Arrays.asList("testrene", "=", "ein mal eins", ";", "a=3", ""), result);
     }
 
     @Test
@@ -58,7 +60,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("rene", "=", "3", ""), result);
+        assertEquals(Arrays.asList("rene", "=", "3", ""), result);
     }
 
     @Test
@@ -69,7 +71,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("testrene", "=", "ein mal eins", ";", "a=3", ""), result);
+        assertEquals(Arrays.asList("testrene", "=", "ein mal eins", ";", "a=3", ""), result);
     }
 
     @Test
@@ -80,7 +82,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("testrene", "=", "3", "/"), result);
+        assertEquals(Arrays.asList("testrene", "=", "3", "/"), result);
     }
 
     @Test
@@ -91,7 +93,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("testrene", "=", "3", ""), result);
+        assertEquals(Arrays.asList("testrene", "=", "3", ""), result);
     }
 
     @Test
@@ -102,7 +104,7 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("testrene", "=", "3", ""), result);
+        assertEquals(Arrays.asList("testrene", "=", "3", ""), result);
     }
 
     @Test
@@ -112,6 +114,6 @@ public class TestCOM {
         Collection<String> result = new ArrayList<>();
         while (!ph.isEof())
             result.add(Com.Parse(ph));
-        Assertions.assertEquals(Arrays.asList("a", "=", ""), result);
+        assertEquals(Arrays.asList("a", "=", ""), result);
     }
 }

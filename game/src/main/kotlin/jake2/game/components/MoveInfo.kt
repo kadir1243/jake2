@@ -2,7 +2,7 @@ package jake2.game.components
 
 import jake2.game.adapters.EntThinkAdapter
 import jake2.game.func.MovementState
-import jake2.qcommon.math.Vector3f
+import jake2.qcommon.util.Vector3f
 import kotlin.math.sqrt
 
 /**

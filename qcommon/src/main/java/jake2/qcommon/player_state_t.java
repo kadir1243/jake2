@@ -27,6 +27,7 @@ import jake2.qcommon.util.Math3D;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.Objects;
 
 /** 
  	Player_state_t is the information needed in addition to pmove_state_t
@@ -50,13 +51,13 @@ public class player_state_t {
 	public int gunindex;
 	public int gunframe;
 
-	public float blend[]= new float[4]; // rgba full screen effect
+	public float[] blend = new float[4]; // rgba full screen effect
 
 	public float fov; // horizontal field of view
 
 	public int rdflags; // refdef flags
 
-	public short stats[]= new short[Defines.MAX_STATS];
+	public short[] stats = new short[Defines.MAX_STATS];
 
 	/** Lets cleverly reset the structure. */
 	private static player_state_t prototype= new player_state_t();
@@ -180,15 +181,13 @@ public class player_state_t {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof player_state_t)) return false;
-
-		player_state_t that = (player_state_t) o;
+		if (!(o instanceof player_state_t that)) return false;
 
 		if (gunindex != that.gunindex) return false;
 		if (gunframe != that.gunframe) return false;
 		if (Float.compare(that.fov, fov) != 0) return false;
 		if (rdflags != that.rdflags) return false;
-		if (pmove != null ? !pmove.equals(that.pmove) : that.pmove != null) return false;
+		if (!Objects.equals(pmove, that.pmove)) return false;
 		if (!Arrays.equals(viewangles, that.viewangles)) return false;
 		if (!Arrays.equals(viewoffset, that.viewoffset)) return false;
 		if (!Arrays.equals(kick_angles, that.kick_angles)) return false;
@@ -209,7 +208,7 @@ public class player_state_t {
 		result = 31 * result + gunindex;
 		result = 31 * result + gunframe;
 		result = 31 * result + Arrays.hashCode(blend);
-		result = 31 * result + (fov != +0.0f ? Float.floatToIntBits(fov) : 0);
+		result = 31 * result + (fov != 0.0f ? Float.floatToIntBits(fov) : 0);
 		result = 31 * result + rdflags;
 		result = 31 * result + Arrays.hashCode(stats);
 		return result;

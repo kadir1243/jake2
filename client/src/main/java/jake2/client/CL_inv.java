@@ -27,11 +27,9 @@
 // Created on 31.01.2004 by RST.
 package jake2.client;
 
-import jake2.qcommon.Com;
 import jake2.qcommon.Defines;
 import jake2.qcommon.network.messages.server.InventoryMessage;
 import jake2.qcommon.util.Lib;
-import jake2.qcommon.util.Vargs;
 
 /**
  * CL_inv
@@ -42,9 +40,7 @@ public class CL_inv {
 	 * ================ CL_ParseInventory ================
 	 */
 	static void ParseInventory(InventoryMessage msg) {
-
-		for (int i = 0; i < Defines.MAX_ITEMS; i++)
-			ClientGlobals.cl.inventory[i] = msg.inventory[i];
+        System.arraycopy(msg.inventory, 0, ClientGlobals.cl.inventory, 0, Defines.MAX_ITEMS);
 	}
 
 	/*
@@ -127,8 +123,7 @@ public class CL_inv {
 					break;
 				}
 
-			string = Com.sprintf("%6s %3i %s", new Vargs(3).add(bind).add(ClientGlobals.cl.inventory[item]).add(
-					ClientGlobals.cl.configstrings[Defines.CS_ITEMS + item]));
+			string = String.format("%6s %3d %s", bind, ClientGlobals.cl.inventory[item], ClientGlobals.cl.configstrings[Defines.CS_ITEMS + item]);
 			if (item != selected)
 				string = getHighBitString(string);
 			else // draw a blinky cursor by the selected item

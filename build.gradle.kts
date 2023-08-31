@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.7.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.10"
 }
 
 allprojects {
@@ -13,6 +13,10 @@ allprojects {
 
     tasks.withType<JavaCompile> {
         options.isDeprecation = true
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
     }
 
     repositories {

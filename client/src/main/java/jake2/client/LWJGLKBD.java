@@ -26,7 +26,8 @@ public class LWJGLKBD extends KBD {
 			if (pressed == null) pressed = new int[256];
 			
 			lastRepeat = Timer.Milliseconds();
-		} catch (Exception e) {;}	
+		} catch (Exception e) {
+        }
 	}
 
 	public void Update() {

@@ -25,7 +25,7 @@
  */
 package jake2.client;
 
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.qcommon.*;
 import jake2.qcommon.network.messages.server.MuzzleFlash2Message;
 import jake2.qcommon.network.messages.server.WeaponSoundMessage;
@@ -291,19 +291,19 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_BLUEHYPERBLASTER:
 			dl.color[0] = 0;
 			dl.color[1] = 0;
 			dl.color[2] = 1;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_HYPERBLASTER:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/hyprbf1a.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_MACHINEGUN:
 			dl.color[0] = 1;
@@ -312,20 +312,20 @@ public class CL_fx {
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_SHOTGUN:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotgf1b.wav"), volume, Defines.ATTN_NORM, 0);
-			S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/shotgr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/shotgf1b.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_AUTO, SoundSystem.RegisterSound("weapons/shotgr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 			break;
 		case Defines.MZ_SSHOTGUN:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/sshotf1b.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/sshotf1b.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_CHAINGUN1:
 			dl.radius = 200 + (Globals.rnd.nextInt() & 31);
@@ -335,7 +335,7 @@ public class CL_fx {
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_CHAINGUN2:
 			dl.radius = 225 + (Globals.rnd.nextInt() & 31);
@@ -346,11 +346,11 @@ public class CL_fx {
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.05f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.05f);
 			break;
 		case Defines.MZ_CHAINGUN3:
 			dl.radius = 250 + (Globals.rnd.nextInt() & 31);
@@ -361,41 +361,41 @@ public class CL_fx {
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0);
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.033f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.033f);
 			//Com_sprintf(soundname, sizeof(soundname),
 			// "weapons/machgf%ib.wav", (rand() % 5) + 1);
 			soundname = "weapons/machgf" + ((Globals.rnd.nextInt(5)) + 1) + "b.wav";
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.066f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), volume, Defines.ATTN_NORM, 0.066f);
 			break;
 		case Defines.MZ_RAILGUN:
 			dl.color[0] = 0.5f;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 1.0f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/railgf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/railgf1a.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_ROCKET:
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.2f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rocklf1a.wav"), volume, Defines.ATTN_NORM, 0);
-			S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/rocklr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/rocklf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_AUTO, SoundSystem.RegisterSound("weapons/rocklr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 			break;
 		case Defines.MZ_GRENADE:
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), volume, Defines.ATTN_NORM, 0);
-			S.StartSound(null, i, Defines.CHAN_AUTO, S.RegisterSound("weapons/grenlr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/grenlf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_AUTO, SoundSystem.RegisterSound("weapons/grenlr1b.wav"), volume, Defines.ATTN_NORM, 0.1f);
 			break;
 		case Defines.MZ_BFG:
 			dl.color[0] = 0;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/bfg__f1y.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/bfg__f1y.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ_LOGIN:
@@ -403,7 +403,7 @@ public class CL_fx {
 			dl.color[1] = 1;
 			dl.color[2] = 0;
 			dl.die = ClientGlobals.cl.time + 1.0f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 			LogoutEffect(pl.current.origin, weapon);
 			break;
 		case Defines.MZ_LOGOUT:
@@ -411,7 +411,7 @@ public class CL_fx {
 			dl.color[1] = 0;
 			dl.color[2] = 0;
 			dl.die = ClientGlobals.cl.time + 1.0f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 			LogoutEffect(pl.current.origin, weapon);
 			break;
 		case Defines.MZ_RESPAWN:
@@ -419,7 +419,7 @@ public class CL_fx {
 			dl.color[1] = 1;
 			dl.color[2] = 0;
 			dl.die = ClientGlobals.cl.time + 1.0f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/grenlf1a.wav"), 1, Defines.ATTN_NORM, 0);
 			LogoutEffect(pl.current.origin, weapon);
 			break;
 		// RAFAEL
@@ -427,14 +427,14 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.5f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/plasshot.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/plasshot.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		// RAFAEL
 		case Defines.MZ_IONRIPPER:
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.5f;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/rippfire.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/rippfire.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 
 		//	   ======================
@@ -443,13 +443,13 @@ public class CL_fx {
 			dl.color[0] = 0.9f;
 			dl.color[1] = 0.7f;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/nail1.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/nail1.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_SHOTGUN2:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/shotg2.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/shotg2.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_HEATBEAM:
 			dl.color[0] = 1;
@@ -464,14 +464,14 @@ public class CL_fx {
 			dl.color[1] = 1;
 			dl.color[2] = 0;
 			// FIXME - different sound for blaster2 ??
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/blastf1a.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_TRACKER:
 			// negative flashes handled the same in gl/soft until CL_AddDLights
 			dl.color[0] = -1;
 			dl.color[1] = -1;
 			dl.color[2] = -1;
-			S.StartSound(null, i, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), volume, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, i, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/disint2.wav"), volume, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.MZ_NUKE1:
 			dl.color[0] = 1;
@@ -552,7 +552,7 @@ public class CL_fx {
 			dl.color[2] = 0;
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_SOLDIER_MACHINEGUN_1:
@@ -568,7 +568,7 @@ public class CL_fx {
 			dl.color[2] = 0;
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck3.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("soldier/solatck3.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_GUNNER_MACHINEGUN_1:
@@ -584,7 +584,7 @@ public class CL_fx {
 			dl.color[2] = 0;
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck2.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("gunner/gunatck2.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_ACTOR_MACHINEGUN_1:
@@ -601,7 +601,7 @@ public class CL_fx {
 
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_BOSS2_MACHINEGUN_L1:
@@ -617,7 +617,7 @@ public class CL_fx {
 
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NONE, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("infantry/infatck1.wav"), 1, Defines.ATTN_NONE, 0);
 			break;
 
 		case Defines.MZ2_SOLDIER_BLASTER_1:
@@ -632,7 +632,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck2.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("soldier/solatck2.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_FLYER_BLASTER_1:
@@ -640,28 +640,28 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("flyer/flyatck3.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("flyer/flyatck3.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_MEDIC_BLASTER_1:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("medic/medatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("medic/medatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_HOVER_BLASTER_1:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("hover/hovatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("hover/hovatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_FLOAT_BLASTER_1:
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("floater/fltatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("floater/fltatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_SOLDIER_SHOTGUN_1:
@@ -676,7 +676,7 @@ public class CL_fx {
 			dl.color[1] = 1;
 			dl.color[2] = 0;
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("soldier/solatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("soldier/solatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_TANK_BLASTER_1:
@@ -685,7 +685,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_TANK_MACHINEGUN_1:
@@ -715,7 +715,7 @@ public class CL_fx {
 			//Com_sprintf(soundname, sizeof(soundname), "tank/tnkatk2%c.wav",
 			// 'a' + rand() % 5);
 			soundname = "tank/tnkatk2" + (char) ('a' + Globals.rnd.nextInt(5)) + ".wav";
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound(soundname), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound(soundname), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_CHICK_ROCKET_1:
@@ -723,7 +723,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.2f;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("chick/chkatck2.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("chick/chkatck2.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_TANK_ROCKET_1:
@@ -732,7 +732,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.2f;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("tank/tnkatck1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_SUPERTANK_ROCKET_1:
@@ -749,7 +749,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0.2f;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/rocket.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("tank/rocket.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_GUNNER_GRENADE_1:
@@ -759,7 +759,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 0.5f;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("gunner/gunatck3.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("gunner/gunatck3.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_GLADIATOR_RAILGUN_1:
@@ -801,7 +801,7 @@ public class CL_fx {
 			dl.color[0] = 1;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("makron/blaster.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("makron/blaster.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_JORG_MACHINEGUN_L1:
@@ -815,7 +815,7 @@ public class CL_fx {
 			dl.color[2] = 0;
 			ParticleEffect(origin, Globals.vec3_origin, 0, 40);
 			CL_tent.SmokeAndFlash(origin);
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("boss3/xfire.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("boss3/xfire.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_JORG_MACHINEGUN_R1:
@@ -897,14 +897,14 @@ public class CL_fx {
 			dl.color[0] = 0;
 			dl.color[1] = 1;
 			dl.color[2] = 0;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("tank/tnkatck3.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_WIDOW_DISRUPTOR:
 			dl.color[0] = -1;
 			dl.color[1] = -1;
 			dl.color[2] = -1;
-			S.StartSound(null, ent, Defines.CHAN_WEAPON, S.RegisterSound("weapons/disint2.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("weapons/disint2.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 
 		case Defines.MZ2_WIDOW_PLASMABEAM:
@@ -2114,25 +2114,25 @@ public class CL_fx {
 	static void EntityEvent(entity_state_t ent) {
 		switch (ent.event) {
 		case Defines.EV_ITEM_RESPAWN:
-			S.StartSound(null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("items/respawn1.wav"), 1, Defines.ATTN_IDLE, 0);
+			SoundSystem.StartSound(null, ent.number, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("items/respawn1.wav"), 1, Defines.ATTN_IDLE, 0);
 			ItemRespawnParticles(ent.origin);
 			break;
 		case Defines.EV_PLAYER_TELEPORT:
-			S.StartSound(null, ent.number, Defines.CHAN_WEAPON, S.RegisterSound("misc/tele1.wav"), 1, Defines.ATTN_IDLE, 0);
+			SoundSystem.StartSound(null, ent.number, Defines.CHAN_WEAPON, SoundSystem.RegisterSound("misc/tele1.wav"), 1, Defines.ATTN_IDLE, 0);
 			TeleportParticles(ent.origin);
 			break;
 		case Defines.EV_FOOTSTEP:
 			if (ClientGlobals.cl_footsteps.value != 0.0f)
-				S.StartSound(null, ent.number, Defines.CHAN_BODY, CL_tent.cl_sfx_footsteps[Lib.rand() & 3], 1, Defines.ATTN_NORM, 0);
+				SoundSystem.StartSound(null, ent.number, Defines.CHAN_BODY, CL_tent.cl_sfx_footsteps[Lib.rand() & 3], 1, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.EV_FALLSHORT:
-			S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("player/land1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent.number, Defines.CHAN_AUTO, SoundSystem.RegisterSound("player/land1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.EV_FALL:
-			S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall2.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent.number, Defines.CHAN_AUTO, SoundSystem.RegisterSound("*fall2.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 		case Defines.EV_FALLFAR:
-			S.StartSound(null, ent.number, Defines.CHAN_AUTO, S.RegisterSound("*fall1.wav"), 1, Defines.ATTN_NORM, 0);
+			SoundSystem.StartSound(null, ent.number, Defines.CHAN_AUTO, SoundSystem.RegisterSound("*fall1.wav"), 1, Defines.ATTN_NORM, 0);
 			break;
 		}
 	}

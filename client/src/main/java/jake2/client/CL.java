@@ -26,7 +26,7 @@
 package jake2.client;
 
 import jake2.client.render.fast.Main;
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.qcommon.*;
 import jake2.qcommon.exec.*;
 import jake2.qcommon.filesystem.FS;
@@ -44,7 +44,6 @@ import jake2.qcommon.network.netadr_t;
 import jake2.qcommon.sys.Timer;
 import jake2.qcommon.util.Lib;
 import jake2.qcommon.util.Math3D;
-import jake2.qcommon.util.Vargs;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -74,19 +73,14 @@ public final class CL {
     private static final int PLAYER_MULT = 5;
 
 
-    private static void Quit()
-    {
+    private static void Quit() {
         Cmd.ExecuteFunction("sv_shutdown", "Server quit ", "false");
         Cmd.ExecuteFunction("cl_shutdown");
 
-        if (Globals.logfile != null)
-        {
-            try
-            {
+        if (Globals.logfile != null) {
+            try {
                 Globals.logfile.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
             }
             Globals.logfile= null;
         }
@@ -266,7 +260,7 @@ public final class CL {
      *
      * see jake2.server.SV_MAIN#SV_ExecuteUserCommand(jake2.server.client_t, java.lang.String)
      */
-    private static Command ForwardToServer_f = (List<String> args) -> {
+    private static Command ForwardToServer_f = args -> {
         if (ClientGlobals.cls.state != Defines.ca_connected
                 && ClientGlobals.cls.state != Defines.ca_active) {
             Com.Printf("Can't \"" + args.get(0) + "\", not connected\n");
@@ -407,7 +401,7 @@ public final class CL {
         if (ClientGlobals.cls.download != null)
             return;
 
-        S.StopAllSounds();
+        SoundSystem.StopAllSounds();
         if (ClientGlobals.cls.state == Defines.ca_connected) {
             Com.Printf("reconnecting...\n");
             ClientGlobals.cls.state = Defines.ca_connected;
@@ -462,8 +456,8 @@ public final class CL {
      * all sounds.
      */
     static Command Snd_Restart_f = (List<String> args) -> {
-        S.Shutdown();
-        S.Init();
+        SoundSystem.Shutdown();
+        SoundSystem.Init();
         CL_parse.RegisterSounds();
     };
 
@@ -638,7 +632,7 @@ public final class CL {
      * 
      */
     static void ClearState() {
-        S.StopAllSounds();
+        SoundSystem.StopAllSounds();
         CL_fx.ClearEffects();
         CL_tent.ClearTEnts();
 
@@ -670,9 +664,7 @@ public final class CL {
             time = (int) (Timer.Milliseconds() - ClientGlobals.cl.timedemo_start);
             if (time > 0)
                 Com.Printf("%i frames, %3.1f seconds: %3.1f fps\n",
-                        new Vargs(3).add(ClientGlobals.cl.timedemo_frames).add(
-                                time / 1000.0).add(
-                                ClientGlobals.cl.timedemo_frames * 1000.0 / time));
+                        ClientGlobals.cl.timedemo_frames, time / 1000.0, ClientGlobals.cl.timedemo_frames * 1000.0 / time);
         }
 
         Math3D.VectorClear(ClientGlobals.cl.refdef.blend);
@@ -1513,7 +1505,7 @@ public final class CL {
         SCR.UpdateScreen();
 
         // update audio
-        S.Update(ClientGlobals.cl.refdef.vieworg, ClientGlobals.cl.v_forward,
+        SoundSystem.Update(ClientGlobals.cl.refdef.vieworg, ClientGlobals.cl.v_forward,
                 ClientGlobals.cl.v_right, ClientGlobals.cl.v_up);
         
         CDAudio.Update(); //sfranzyshen
@@ -1552,7 +1544,7 @@ public final class CL {
         WriteConfiguration();
         
         CDAudio.Shutdown();
-        S.Shutdown();
+        SoundSystem.Shutdown();
         IN.Shutdown();
         VID.Shutdown();
     }
@@ -1568,7 +1560,7 @@ public final class CL {
 
         Console.Init(); //ok
 
-        S.Init(); //empty
+        SoundSystem.Init(); //empty
         VID.Init();
 
         V.Init();

@@ -18,20 +18,20 @@ public final class Vec3Cache {
     private static int index = 0;
     private static int max = 0;
     
-    public static final float[] get() {
+    public static float[] get() {
         //max = Math.max(index, max);
         return cache[index++];
     }
     
-    public static final void release() {
+    public static void release() {
         index--;
     }
 
-    public static final void release(int count) {
+    public static void release(int count) {
         index-=count;
     }
     
-    public static final void debug() {
+    public static void debug() {
         System.err.println("Vec3Cache: max. " + (max + 1) + " vectors used.");
     }
 }

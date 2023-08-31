@@ -25,7 +25,7 @@
  */
 package jake2.client;
 
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.qcommon.Com;
 import jake2.qcommon.Globals;
 import jake2.qcommon.ServerStates;
@@ -226,7 +226,7 @@ public final class Menu extends Key {
     }
 
     static void PopMenu() {
-        S.StartLocalSound(menu_out_sound);
+        SoundSystem.StartLocalSound(menu_out_sound);
         m_menudepth--;
         if (m_menudepth < 0)
             Com.Error(ERR_FATAL, "PopMenu: depth < 1");
@@ -1350,7 +1350,7 @@ public final class Menu extends Key {
     private static void UpdateSoundQualityFunc(Object unused) {
         boolean driverNotChanged = false;
         String current = s_drivers[s_options_quality_list.curvalue];
-        driverNotChanged = S.getDriverName().equals(current);
+        driverNotChanged = SoundSystem.getDriverName().equals(current);
 //        if (s_options_quality_list.curvalue != 0) {
 //            //			Cvar.SetValue("s_khz", 22);
 //            //			Cvar.SetValue("s_loadas8bit", 0);
@@ -1397,7 +1397,7 @@ public final class Menu extends Key {
     
     private static void Options_MenuInit() {
 
-    	s_drivers = S.getDriverNames();
+    	s_drivers = SoundSystem.getDriverNames();
     	s_labels = new String[s_drivers.length];
     	for (int i = 0; i < s_drivers.length; i++) {
     		if ("dummy".equals(s_drivers[i])) {
@@ -4138,7 +4138,7 @@ public final class Menu extends Key {
         // menu has been drawn, to avoid delay while
         // caching images
         if (m_entersound) {
-            S.StartLocalSound(menu_in_sound);
+            SoundSystem.StartLocalSound(menu_in_sound);
             m_entersound = false;
         }
     }
@@ -4151,7 +4151,7 @@ public final class Menu extends Key {
 
         if (m_keyfunc != null)
             if ((s = m_keyfunc.execute(key)) != null)
-                S.StartLocalSound(s);
+                SoundSystem.StartLocalSound(s);
     }
 
     private static void Action_DoEnter(menuaction_s a) {

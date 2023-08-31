@@ -29,7 +29,7 @@ public class sfxcache_t {
 	public int speed;			// not needed, because converted on load?
 	public int width;
 	public int stereo;
-	public byte data[];		// variable sized
+	public byte[] data;		// variable sized
 	
 	public sfxcache_t(int size) {
 		data = new byte[size];

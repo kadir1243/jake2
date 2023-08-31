@@ -15,7 +15,7 @@ import jake2.game.components.getComponent
 import jake2.game.hasSpawnFlag
 import jake2.qcommon.Defines
 import jake2.qcommon.Globals
-import jake2.qcommon.math.Vector3f
+import jake2.qcommon.util.Vector3f
 import jake2.qcommon.util.Math3D
 
 /*

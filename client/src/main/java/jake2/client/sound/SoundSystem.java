@@ -25,51 +25,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package jake2.client.sound;
 
+import jake2.client.sound.lwjgl.LWJGLSoundImpl;
 import jake2.qcommon.Com;
 import jake2.qcommon.Defines;
 import jake2.qcommon.exec.Cvar;
 import jake2.qcommon.exec.cvar_t;
+import org.lwjgl.Sys;
 
 import java.nio.ByteBuffer;
-import java.util.Vector;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * S
- */
-public class S {
-	
-	static Sound impl;
+public class SoundSystem {
+	private static Sound driverInUse = DummyDriver.INSTANCE;
 	static cvar_t s_impl;
-	
-	static Vector<Sound> drivers = new Vector<>(3);
+
+	static Map<String, Sound> DRIVERS = new ConcurrentHashMap<>();
 	
 	/** 
 	 * Searches for and initializes all known sound drivers.
 	 */
 	static {	    
-		// dummy driver (no sound)
+		DRIVERS.put("dummy", DummyDriver.INSTANCE);
+
 		try {
-			Class.forName("jake2.client.sound.DummyDriver");
-			// initialize impl with the default value
-			// this is  necessary for dedicated mode
-			useDriver("dummy");
-		} catch (Throwable e) {
-			Com.DPrintf("could not init dummy sound driver class.");
-		}
-			
-		try {
-			Class.forName("org.lwjgl.openal.AL");
-			Class.forName("jake2.client.sound.lwjgl.LWJGLSoundImpl");
-		} catch (Throwable e) {
+			Sys.initialize();
+			SoundSystem.register("lwjgl", LWJGLSoundImpl.INSTANCE);
+		} catch (Exception e) {
 			// ignore the lwjgl driver if runtime not in classpath
 			Com.DPrintf("could not init lwjgl sound driver class.");
 		}
-			
+
 		// prefered driver
 		try {
 			Class.forName("com.jogamp.openal.AL");
 			Class.forName("jake2.client.sound.joal.JOALSoundImpl");
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			// ignore the joal driver if runtime not in classpath
 			Com.DPrintf("could not init joal sound driver class.");
 		}
@@ -78,27 +69,24 @@ public class S {
 	/**
 	 * Registers a new Sound Implementor.
 	 */
-	public static void register(Sound driver) {
+	public static void register(String name, Sound driver) {
 		if (driver == null) {
 			throw new IllegalArgumentException("Sound implementation can't be null");
 		}
-		if (!drivers.contains(driver)) {
-			drivers.add(driver);
+		if (!DRIVERS.containsValue(driver)) {
+			DRIVERS.put(name, driver);
 		}
 	}
-	
+
+	public static void register(Sound driver) {
+		register(driver.getName(), driver);
+	}
+
 	/**
 	 * Switches to the specific sound driver.
 	 */
 	public static void useDriver(String driverName) {
-		for (Sound sound : drivers) {
-            if (sound.getName().equals(driverName)) {
-                impl = sound;
-                return;
-            }
-        }
-		// if driver not found use dummy
-		impl = drivers.lastElement();
+		driverInUse = DRIVERS.get(driverName);
 	}
 	
 	/**
@@ -117,55 +105,55 @@ public class S {
 
 		// set the last registered driver as default
 		String defaultDriver = "dummy";
-		if (drivers.size() > 1){
-			defaultDriver = drivers.lastElement().getName();
+		if (DRIVERS.size() > 1){
+			defaultDriver = getDriverNames()[DRIVERS.size() - 1];
 		}
 		
 		s_impl = Cvar.getInstance().Get("s_impl", defaultDriver, Defines.CVAR_ARCHIVE);
 		useDriver(s_impl.string);
 
-		if (impl.Init()) {
+		if (driverInUse.Init()) {
 			// driver ok
-			Cvar.getInstance().Set("s_impl", impl.getName());
+			Cvar.getInstance().Set("s_impl", driverInUse.getName());
 		} else {
 			// fallback
 			useDriver("dummy");
 		}
 		
-		Com.Printf("\n------- use sound driver \"" + impl.getName() + "\" -------\n");
+		Com.Printf("\n------- use sound driver \"" + driverInUse.getName() + "\" -------\n");
 		StopAllSounds();
 	}
 	
 	public static void Shutdown() {
-		impl.Shutdown();
+		driverInUse.Shutdown();
 	}
 	
 	/**
 	 * Called before the sounds are to be loaded and registered.
 	 */
 	public static void BeginRegistration() {
-		impl.BeginRegistration();		
+		driverInUse.BeginRegistration();
 	}
 	
 	/**
 	 * Registers and loads a sound.
 	 */
 	public static sfx_t RegisterSound(String sample) {
-		return impl.RegisterSound(sample);
+		return driverInUse.RegisterSound(sample);
 	}
 	
 	/**
 	 * Called after all sounds are registered and loaded.
 	 */
 	public static void EndRegistration() {
-		impl.EndRegistration();
+		driverInUse.EndRegistration();
 	}
 	
 	/**
 	 * Starts a local sound.
 	 */
 	public static void StartLocalSound(String sound) {
-		impl.StartLocalSound(sound);		
+		driverInUse.StartLocalSound(sound);
 	}
 	
 	/** 
@@ -174,7 +162,7 @@ public class S {
 	 * Entchannel 0 will never override a playing sound
 	 */
 	public static void StartSound(float[] origin, int entnum, int entchannel, sfx_t sfx, float fvol, float attenuation, float timeofs) {
-		impl.StartSound(origin, entnum, entchannel, sfx, fvol, attenuation, timeofs);
+		driverInUse.StartSound(origin, entnum, entchannel, sfx, fvol, attenuation, timeofs);
 	}
 
 	/**
@@ -182,43 +170,39 @@ public class S {
 	 * called once each time through the main loop.
 	 */
 	public static void Update(float[] origin, float[] forward, float[] right, float[] up) {
-		impl.Update(origin, forward, right, up);
+		driverInUse.Update(origin, forward, right, up);
 	}
 
 	/**
 	 * Cinematic streaming and voice over network.
 	 */
 	public static void RawSamples(int samples, int rate, int width, int channels, ByteBuffer data) {
-		impl.RawSamples(samples, rate, width, channels, data);
+		driverInUse.RawSamples(samples, rate, width, channels, data);
 	}
     
 	/**
 	 * Switches off the sound streaming.
 	 */ 
     public static void disableStreaming() {
-        impl.disableStreaming();
+        driverInUse.disableStreaming();
     }
 
 	/**
 	 * Stops all sounds. 
 	 */
 	public static void StopAllSounds() {
-		impl.StopAllSounds();
+		driverInUse.StopAllSounds();
 	}
 	
 	public static String getDriverName() {
-		return impl.getName();
+		return driverInUse.getName();
 	}
 	
 	/**
 	 * Returns a string array containing all sound driver names.
 	 */
 	public static String[] getDriverNames() {
-		String[] names = new String[drivers.size()];
-		for (int i = 0; i < names.length; i++) {
-			names[i] = drivers.get(i).getName();
-		}
-		return names;
+		return DRIVERS.keySet().toArray(new String[0]);
 	}
 	
 	/**

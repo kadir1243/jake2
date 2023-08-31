@@ -31,6 +31,7 @@ import jake2.client.render.model_t;
 import jake2.qcommon.exec.Command;
 
 import java.awt.*;
+import java.util.Collections;
 
 /**
  * refexport_t
@@ -38,6 +39,8 @@ import java.awt.*;
  * @author cwei
  */
 public interface refexport_t {
+	refexport_t DUMMY = new refexport_t() {};
+
 	// ============================================================================
 	// public interface for Renderer implementations
 	//
@@ -47,10 +50,13 @@ public interface refexport_t {
 	// these are the functions exported by the refresh module
 	//
 	// called when the library is loaded
-	boolean Init(int vid_xpos, int vid_ypos);
+	default boolean Init(int vid_xpos, int vid_ypos) {
+		return false;
+	}
 
 	// called before the library is unloaded
-	void Shutdown();
+	default void Shutdown() {
+	}
 
 	// All data that will be used in a level should be
 	// registered before rendering any frames to prevent disk hits,
@@ -65,43 +71,86 @@ public interface refexport_t {
 	// are flood filled to eliminate mip map edge errors, and pics have
 	// an implicit "pics/" prepended to the name. (a pic name that starts with a
 	// slash will not use the "pics/" prefix or the ".pcx" postfix)
-	void BeginRegistration(String map);
-	model_t RegisterModel(String name);
-	image_t RegisterSkin(String name);
-	image_t RegisterPic(String name);
-	void SetSky(String name, float rotate, /* vec3_t */
-	float[] axis);
-	void EndRegistration();
+	default void BeginRegistration(String map) {
+	}
 
-	void RenderFrame(refdef_t fd);
+	default model_t RegisterModel(String name) {
+		return null;
+	}
 
-	void DrawGetPicSize(Dimension dim /* int *w, *h */, String name);
+	default image_t RegisterSkin(String name) {
+		return null;
+	}
+
+	default image_t RegisterPic(String name) {
+		return null;
+	}
+
+	default void SetSky(String name, float rotate, /* vec3_t */
+						float[] axis) {
+	}
+
+	default void EndRegistration() {
+	}
+
+	default void RenderFrame(refdef_t fd) {
+	}
+
+	default void DrawGetPicSize(Dimension dim /* int *w, *h */, String name) {
+	}
+
 	// will return 0 0 if not found
-	void DrawPic(int x, int y, String name);
-	void DrawStretchPic(int x, int y, int w, int h, String name);
-	void DrawChar(int x, int y, int num); // num is 8 bit ASCII 
-	void DrawTileClear(int x, int y, int w, int h, String name);
-	void DrawFill(int x, int y, int w, int h, int c);
-	void DrawFadeScreen();
+	default void DrawPic(int x, int y, String name) {
+	}
+
+	default void DrawStretchPic(int x, int y, int w, int h, String name) {
+	}
+
+	default void DrawChar(int x, int y, int num) { // num is 8 bit ASCII
+	}
+
+	default void DrawTileClear(int x, int y, int w, int h, String name) {
+	}
+
+	default void DrawFill(int x, int y, int w, int h, int c) {
+	}
+
+	default void DrawFadeScreen() {
+	}
 
 	// Draw images for cinematic rendering (which can have a different palette). Note that calls
-	void DrawStretchRaw(int x,	int y, int w, int h, int cols, int rows, byte[] data);
+	default void DrawStretchRaw(int x, int y, int w, int h, int cols, int rows, byte[] data) {
+	}
 
 	/*
-	** video mode and refresh state management entry points
-	*/
+	 ** video mode and refresh state management entry points
+	 */
 	/* 256 r,g,b values;	null = game palette, size = 768 bytes */
-	void CinematicSetPalette(final byte[] palette);
-	void BeginFrame(float camera_separation);
-	void EndFrame();
+	default void CinematicSetPalette(final byte[] palette) {
+	}
 
-	void AppActivate(boolean activate);
-	
-	void updateScreen(Command callback);
-	
-	int apiVersion();
-	
-	DisplayMode[] getModeList();
-	
-	KBD getKeyboardHandler();
+	default void BeginFrame(float camera_separation) {
+	}
+
+	default void EndFrame() {
+	}
+
+	default void AppActivate(boolean activate) {
+	}
+
+	default void updateScreen(Command callback) {
+		callback.execute(Collections.emptyList());
+	}
+
+	default int apiVersion() {
+		return 0;
+	}
+
+	default DisplayMode[] getModeList() {
+		return new DisplayMode[0];
+	}
+
+	default KBD getKeyboardHandler() {
+		return null;
+	}
 }

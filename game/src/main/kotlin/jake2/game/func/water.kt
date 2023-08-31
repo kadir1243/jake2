@@ -9,7 +9,7 @@ import jake2.game.components.addComponent
 import jake2.game.hasSpawnFlag
 import jake2.game.setSpawnFlag
 import jake2.qcommon.Defines
-import jake2.qcommon.math.Vector3f
+import jake2.qcommon.util.Vector3f
 import jake2.qcommon.util.Math3D
 import kotlin.math.abs
 

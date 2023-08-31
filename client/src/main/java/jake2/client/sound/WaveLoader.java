@@ -31,13 +31,12 @@ import jake2.qcommon.filesystem.FS;
  * SND_MEM
  */
 public class WaveLoader {
-
 	/** 
 	 * The ResampleSfx can squeeze and stretch samples to a default sample rate. 
 	 * Since Joal and lwjgl sound drivers support this, we don't need it and the samples
 	 * can keep their original sample rate. Use this switch for reactivating resampling.
 	 */
-	private static boolean DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL = true;
+	private static final boolean DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL = true;
 	
 	/**
 	 * This is the maximum sample length in bytes which has to be replaced by 
@@ -91,7 +90,7 @@ public class WaveLoader {
 		if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL)
 			stepscale = 1; 
 		else
-			stepscale = (float)info.rate / S.getDefaultSampleRate();
+			stepscale = (float)info.rate / SoundSystem.getDefaultSampleRate();
 		
 		int len = (int) (info.samples / stepscale);
 		len = len * info.width * info.channels;
@@ -142,7 +141,7 @@ public class WaveLoader {
         if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL)
         	stepscale = 1;
         else
-        	stepscale = (float)inrate / S.getDefaultSampleRate();  
+        	stepscale = (float)inrate / SoundSystem.getDefaultSampleRate();
         outcount = (int) (sc.length/stepscale);
         sc.length = outcount;
         
@@ -150,8 +149,8 @@ public class WaveLoader {
                 sc.loopstart = (int) (sc.loopstart / stepscale);
 
         // if resampled, sample has now the default sample rate
-        if (DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL == false)
-        	sc.speed = S.getDefaultSampleRate();
+        if (!DONT_DO_A_RESAMPLING_FOR_JOAL_AND_LWJGL)
+        	sc.speed = SoundSystem.getDefaultSampleRate();
 
         sc.width = inwidth;
         sc.stereo = 0;

@@ -23,8 +23,6 @@ import static jake2.qcommon.MainCommon.debugLogTraces;
 public class Jake2Dedicated {
 
     public static void main(String[] args) {
-
-
         Globals.dedicated = Cvar.getInstance().Get("dedicated", "1", Defines.CVAR_NOSET );
 
         // in C the first arg is the filename
@@ -95,7 +93,6 @@ public class Jake2Dedicated {
 
             if (time > 0) {
                 try {
-
                     int adjustedTime = adjustTime(time);
 
                     debugLogTraces();

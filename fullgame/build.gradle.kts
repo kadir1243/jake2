@@ -48,6 +48,7 @@ task("listNatives") {
  * https://discuss.gradle.org/t/how-to-use-lwjgl-or-how-to-use-native-libraries/7498/13
  */
 task("copyNatives") {
+    val buildDirectory = this.project.layout.buildDirectory
     doLast {
         copy {
             val platforms = listOf("windows", "linux", "osx")
@@ -62,7 +63,7 @@ task("copyNatives") {
                     from(zipTree(it.file))
                 }
             }
-            into("${buildDir}/natives")
+            into("${buildDirectory}/natives")
         }
     }
 }

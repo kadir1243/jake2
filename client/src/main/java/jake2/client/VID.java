@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package jake2.client;
 
 import jake2.client.render.Renderer;
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.qcommon.Com;
 import jake2.qcommon.Defines;
 import jake2.qcommon.Globals;
@@ -219,7 +219,7 @@ public class VID extends Globals {
 	    
 		if ( vid_ref.modified )
 		{
-			S.StopAllSounds();
+			SoundSystem.StopAllSounds();
 		}
 
 		while (vid_ref.modified)

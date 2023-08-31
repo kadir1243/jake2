@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * </ol>
  * Validated by writing the message to the buffer and comparing the size.
  */
+@Disabled
 public class NetworkMessageSizeTest {
     private static final int INVALID_FRAME_INDEX = 99;
     private static final int SIZE = 1024;

@@ -1,5 +1,6 @@
 package jake2.qcommon
 
+import jake2.qcommon.util.EntityParser.parseEntities
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -19,24 +20,28 @@ class ParseEntitiesTest {
 
     @Test
     fun testSimpleCase() {
-        val entities = parseEntities("""
-            {
-                "hello" "world"
-            }
-        """.trimIndent())
+        val entities = parseEntities(
+            """
+                {
+                    "hello" "world"
+                }
+            """.trimIndent()
+        )
         assertEquals(1, entities.size)
         assertEquals("world", entities.firstOrNull()?.get("hello"))
     }
 
     @Test
     fun testComment() {
-        val entities = parseEntities("""
-            // this is just a comment from 2022
-            {
-                "game" "baseq2"
-                "name" "bitterman" // where is willits?
-            } // end of the line
-        """.trimIndent())
+        val entities = parseEntities(
+            """
+                // this is just a comment from 2022
+                {
+                    "game" "baseq2"
+                    "name" "bitterman" // where is willits?
+                } // end of the line
+            """.trimIndent()
+        )
         assertEquals(1, entities.size)
         assertEquals("baseq2", entities.firstOrNull()?.get("game"))
         assertEquals("bitterman", entities.firstOrNull()?.get("name"))
@@ -44,14 +49,16 @@ class ParseEntitiesTest {
 
     @Test
     fun testTwoEntities() {
-        val entities = parseEntities("""
-            {
-                "classname" "worldspawn"
-            }
-            {
-                "classname" "light"
-            }
-        """.trimIndent())
+        val entities = parseEntities(
+            """
+                {
+                    "classname" "worldspawn"
+                }
+                {
+                    "classname" "light"
+                }
+            """.trimIndent()
+        )
         assertEquals(2, entities.size)
         assertEquals("worldspawn", entities.firstOrNull()?.get("classname"))
         assertEquals("light", entities.lastOrNull()?.get("classname"))
@@ -59,23 +66,27 @@ class ParseEntitiesTest {
 
     @Test
     fun testValueWithSpace() {
-        val entities = parseEntities("""
-            {
-                "message" "hello world"
-            }
-        """.trimIndent())
+        val entities = parseEntities(
+            """
+                {
+                    "message" "hello world"
+                }
+            """.trimIndent()
+        )
         assertEquals(1, entities.size)
         assertEquals("hello world", entities.firstOrNull()?.get("message"))
     }
 
     @Test
     fun testTwoValues() {
-        val entities = parseEntities("""
-            {
-                "hello" "world"
-                "foo" "bar"
-            }
-        """.trimIndent())
+        val entities = parseEntities(
+            """
+                {
+                    "hello" "world"
+                    "foo" "bar"
+                }
+            """.trimIndent()
+        )
         assertEquals(1, entities.size)
         assertEquals("world", entities.firstOrNull()?.get("hello"))
         assertEquals("bar", entities.firstOrNull()?.get("foo"))

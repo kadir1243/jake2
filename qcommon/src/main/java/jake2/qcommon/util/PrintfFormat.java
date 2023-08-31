@@ -469,8 +469,8 @@ public class PrintfFormat {
 	 */
 	public PrintfFormat(Locale locale, String fmtArg) throws IllegalArgumentException {
 		dfs = new DecimalFormatSymbols(locale);
-		int ePos = 0;
-		ConversionSpecification sFmt = null;
+		int ePos;
+		ConversionSpecification sFmt;
 		String unCS = this.nonControl(fmtArg, 0);
 		if (unCS != null) {
 			sFmt = new ConversionSpecification();
@@ -479,7 +479,7 @@ public class PrintfFormat {
 		}
 		while (cPos != -1 && cPos < fmtArg.length()) {
 			for (ePos = cPos + 1; ePos < fmtArg.length(); ePos++) {
-				char c = 0;
+				char c;
 				c = fmtArg.charAt(ePos);
 				if (c == 'i')
 					break;
@@ -548,13 +548,13 @@ public class PrintfFormat {
 	 * @return  The formatted String.
 	 */
 	public String sprintf(Object[] o) {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
+		Enumeration<ConversionSpecification> e = vFmt.elements();
+		ConversionSpecification cs;
 		char c = 0;
 		int i = 0;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
+			cs = e.nextElement();
 			c = cs.getConversionCharacter();
 			if (c == '\0')
 				sb.append(cs.getLiteral());
@@ -605,172 +605,7 @@ public class PrintfFormat {
 		}
 		return sb.toString();
 	}
-	/**
-	 * Format nothing.  Just use the control string.
-	 * @return  the formatted String.
-	 */
-	public String sprintf() {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-		}
-		return sb.toString();
-	}
-	/**
-	 * Format an int.
-	 * @param x The int to format.
-	 * @return  The formatted String.
-	 * @exception IllegalArgumentException if the
-	 *     conversion character is f, e, E, g, G, s,
-	 *     or S.
-	 */
-	public String sprintf(int x) throws IllegalArgumentException {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-			else
-				sb.append(cs.internalsprintf(x));
-		}
-		return sb.toString();
-	}
-	/**
-	 * Format an long.
-	 * @param x The long to format.
-	 * @return  The formatted String.
-	 * @exception IllegalArgumentException if the
-	 *     conversion character is f, e, E, g, G, s,
-	 *     or S.
-	 */
-	public String sprintf(long x) throws IllegalArgumentException {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-			else
-				sb.append(cs.internalsprintf(x));
-		}
-		return sb.toString();
-	}
-	/**
-	 * Format a double.
-	 * @param x The double to format.
-	 * @return  The formatted String.
-	 * @exception IllegalArgumentException if the
-	 *     conversion character is c, C, s, S,
-	 *     d, d, x, X, or o.
-	 */
-	public String sprintf(double x) throws IllegalArgumentException {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-			else
-				sb.append(cs.internalsprintf(x));
-		}
-		return sb.toString();
-	}
-	/**
-	 * Format a String.
-	 * @param x The String to format.
-	 * @return  The formatted String.
-	 * @exception IllegalArgumentException if the
-	 *   conversion character is neither s nor S.
-	 */
-	public String sprintf(String x) throws IllegalArgumentException {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-			else
-				sb.append(cs.internalsprintf(x));
-		}
-		return sb.toString();
-	}
-	/**
-	 * Format an Object.  Convert wrapper types to
-	 * their primitive equivalents and call the
-	 * appropriate internal formatting method. Convert
-	 * Strings using an internal formatting method for
-	 * Strings. Otherwise use the default formatter
-	 * (use toString).
-	 * @param x the Object to format.
-	 * @return  the formatted String.
-	 * @exception IllegalArgumentException if the
-	 *    conversion character is inappropriate for
-	 *    formatting an unwrapped value.
-	 */
-	public String sprintf(Object x) throws IllegalArgumentException {
-		Enumeration e = vFmt.elements();
-		ConversionSpecification cs = null;
-		char c = 0;
-		StringBuffer sb = new StringBuffer();
-		while (e.hasMoreElements()) {
-			cs = (ConversionSpecification) e.nextElement();
-			c = cs.getConversionCharacter();
-			if (c == '\0')
-				sb.append(cs.getLiteral());
-			else if (c == '%')
-				sb.append("%");
-			else {
-				if (x instanceof Byte)
-					sb.append(cs.internalsprintf(((Byte) x).byteValue()));
-				else if (x instanceof Short)
-					sb.append(cs.internalsprintf(((Short) x).shortValue()));
-				else if (x instanceof Integer)
-					sb.append(cs.internalsprintf(((Integer) x).intValue()));
-				else if (x instanceof Long)
-					sb.append(cs.internalsprintf(((Long) x).longValue()));
-				else if (x instanceof Float)
-					sb.append(cs.internalsprintf(((Float) x).floatValue()));
-				else if (x instanceof Double)
-					sb.append(cs.internalsprintf(((Double) x).doubleValue()));
-				else if (x instanceof Character)
-					sb.append(cs.internalsprintf(((Character) x).charValue()));
-				else if (x instanceof String)
-					sb.append(cs.internalsprintf((String) x));
-				else
-					sb.append(cs.internalsprintf(x));
-			}
-		}
-		return sb.toString();
-	}
+
 	/**
 	 *<p>
 	 * ConversionSpecification allows the formatting of
@@ -825,7 +660,7 @@ public class PrintfFormat {
 		ConversionSpecification(String fmtArg) throws IllegalArgumentException {
 			if (fmtArg == null)
 				throw new NullPointerException();
-			if (fmtArg.length() == 0)
+			if (fmtArg.isEmpty())
 				throw new IllegalArgumentException("Control strings must have positive" + " lengths.");
 			if (fmtArg.charAt(0) == '%') {
 				fmt = fmtArg;
@@ -868,7 +703,7 @@ public class PrintfFormat {
 		 * @return s the stored String.
 		 */
 		String getLiteral() {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			int i = 0;
 			while (i < fmt.length()) {
 				if (fmt.charAt(i) == '\\') {
@@ -970,42 +805,36 @@ public class PrintfFormat {
 		 *     conversion character is f, e, E, g, or G.
 		 */
 		String internalsprintf(int s) throws IllegalArgumentException {
-			String s2 = "";
-			switch (conversionCharacter) {
-				case 'd' :
-				case 'i' :
-					if (optionalh)
-						s2 = printDFormat((short) s);
-					else if (optionall)
-						s2 = printDFormat((long) s);
-					else
-						s2 = printDFormat(s);
-					break;
-				case 'x' :
-				case 'X' :
-					if (optionalh)
-						s2 = printXFormat((short) s);
-					else if (optionall)
-						s2 = printXFormat((long) s);
-					else
-						s2 = printXFormat(s);
-					break;
-				case 'o' :
-					if (optionalh)
-						s2 = printOFormat((short) s);
-					else if (optionall)
-						s2 = printOFormat((long) s);
-					else
-						s2 = printOFormat(s);
-					break;
-				case 'c' :
-				case 'C' :
-					s2 = printCFormat((char) s);
-					break;
-				default :
-					throw new IllegalArgumentException(
-						"Cannot format a int with a format using a " + conversionCharacter + " conversion character.");
-			}
+			String s2;
+            switch (conversionCharacter) {
+                case 'd', 'i' -> {
+                    if (optionalh)
+                        s2 = printDFormat((short) s);
+                    else if (optionall)
+                        s2 = printDFormat((long) s);
+                    else
+                        s2 = printDFormat(s);
+                }
+                case 'x', 'X' -> {
+                    if (optionalh)
+                        s2 = printXFormat((short) s);
+                    else if (optionall)
+                        s2 = printXFormat((long) s);
+                    else
+                        s2 = printXFormat(s);
+                }
+                case 'o' -> {
+                    if (optionalh)
+                        s2 = printOFormat((short) s);
+                    else if (optionall)
+                        s2 = printOFormat((long) s);
+                    else
+                        s2 = printOFormat(s);
+                }
+                case 'c', 'C' -> s2 = printCFormat((char) s);
+                default -> throw new IllegalArgumentException(
+                        "Cannot format a int with a format using a " + conversionCharacter + " conversion character.");
+            }
 			return s2;
 		}
 		/**
@@ -1017,7 +846,7 @@ public class PrintfFormat {
 		 *     conversion character is f, e, E, g, or G.
 		 */
 		String internalsprintf(long s) throws IllegalArgumentException {
-			String s2 = "";
+			String s2;
 			switch (conversionCharacter) {
 				case 'd' :
 				case 'i' :
@@ -1065,24 +894,13 @@ public class PrintfFormat {
 		 *     x, X, or o.
 		 */
 		String internalsprintf(double s) throws IllegalArgumentException {
-			String s2 = "";
-			switch (conversionCharacter) {
-				case 'f' :
-					s2 = printFFormat(s);
-					break;
-				case 'E' :
-				case 'e' :
-					s2 = printEFormat(s);
-					break;
-				case 'G' :
-				case 'g' :
-					s2 = printGFormat(s);
-					break;
-				default :
-					throw new IllegalArgumentException(
-						"Cannot " + "format a double with a format using a " + conversionCharacter + " conversion character.");
-			}
-			return s2;
+			return switch (conversionCharacter) {
+                case 'f' -> printFFormat(s);
+                case 'E', 'e' -> printEFormat(s);
+                case 'G', 'g' -> printGFormat(s);
+                default -> throw new IllegalArgumentException(
+                        "Cannot " + "format a double with a format using a " + conversionCharacter + " conversion character.");
+            };
 		}
 		/**
 		 * Format a String argument using this conversion
@@ -1093,7 +911,7 @@ public class PrintfFormat {
 		 *   conversion character is neither s nor S.
 		 */
 		String internalsprintf(String s) throws IllegalArgumentException {
-			String s2 = "";
+			String s2;
 			if (conversionCharacter == 's' || conversionCharacter == 'S')
 				s2 = printSFormat(s);
 			else
@@ -1110,7 +928,7 @@ public class PrintfFormat {
 		 *     conversion character is neither s nor S.
 		 */
 		String internalsprintf(Object s) {
-			String s2 = "";
+			String s2;
 			if (conversionCharacter == 's' || conversionCharacter == 'S')
 				s2 = printSFormat(s.toString());
 			else
@@ -1280,14 +1098,14 @@ public class PrintfFormat {
 				}
 				if (fieldWidthSet)
 					nZeros = fieldWidth - ca4.length;
-				if ((!minusSign && (leadingSign || leadingSpace)) || minusSign)
+				if (minusSign || (leadingSign || leadingSpace))
 					nZeros--;
 				nZeros -= xThousands;
 				if (nZeros < 0)
 					nZeros = 0;
 			}
 			j = 0;
-			if ((!minusSign && (leadingSign || leadingSpace)) || minusSign) {
+			if (minusSign || (leadingSign || leadingSpace)) {
 				ca5 = new char[ca4.length + nZeros + 1];
 				j++;
 			} else
@@ -1405,7 +1223,7 @@ public class PrintfFormat {
 		private char[] eFormatDigits(double x, char eChar) {
 			char[] ca1, ca2, ca3;
 			// int defaultDigits=6;
-			String sx, sxOut;
+			String sx;
 			int i, j, k, p;
 			int n1In, n2In;
 			int expon = 0;
@@ -1536,35 +1354,17 @@ public class PrintfFormat {
 				ca2[i++] = '+';
 			expon = Math.abs(expon);
 			if (expon >= 100) {
-				switch (expon / 100) {
-					case 1 :
-						ca2[i] = '1';
-						break;
-					case 2 :
-						ca2[i] = '2';
-						break;
-					case 3 :
-						ca2[i] = '3';
-						break;
-					case 4 :
-						ca2[i] = '4';
-						break;
-					case 5 :
-						ca2[i] = '5';
-						break;
-					case 6 :
-						ca2[i] = '6';
-						break;
-					case 7 :
-						ca2[i] = '7';
-						break;
-					case 8 :
-						ca2[i] = '8';
-						break;
-					case 9 :
-						ca2[i] = '9';
-						break;
-				}
+                switch (expon / 100) {
+                    case 1 -> ca2[i] = '1';
+                    case 2 -> ca2[i] = '2';
+                    case 3 -> ca2[i] = '3';
+                    case 4 -> ca2[i] = '4';
+                    case 5 -> ca2[i] = '5';
+                    case 6 -> ca2[i] = '6';
+                    case 7 -> ca2[i] = '7';
+                    case 8 -> ca2[i] = '8';
+                    case 9 -> ca2[i] = '9';
+                }
 				i++;
 			}
 			switch ((expon % 100) / 10) {
@@ -1752,39 +1552,21 @@ public class PrintfFormat {
 			boolean carry = true;
 			for (int i = cLast; carry && i >= cFirst; i--) {
 				carry = false;
-				switch (ca[i]) {
-					case '0' :
-						ca[i] = '1';
-						break;
-					case '1' :
-						ca[i] = '2';
-						break;
-					case '2' :
-						ca[i] = '3';
-						break;
-					case '3' :
-						ca[i] = '4';
-						break;
-					case '4' :
-						ca[i] = '5';
-						break;
-					case '5' :
-						ca[i] = '6';
-						break;
-					case '6' :
-						ca[i] = '7';
-						break;
-					case '7' :
-						ca[i] = '8';
-						break;
-					case '8' :
-						ca[i] = '9';
-						break;
-					case '9' :
-						ca[i] = '0';
-						carry = true;
-						break;
-				}
+                switch (ca[i]) {
+                    case '0' -> ca[i] = '1';
+                    case '1' -> ca[i] = '2';
+                    case '2' -> ca[i] = '3';
+                    case '3' -> ca[i] = '4';
+                    case '4' -> ca[i] = '5';
+                    case '5' -> ca[i] = '6';
+                    case '6' -> ca[i] = '7';
+                    case '7' -> ca[i] = '8';
+                    case '8' -> ca[i] = '9';
+                    case '9' -> {
+                        ca[i] = '0';
+                        carry = true;
+                    }
+                }
 			}
 			return carry;
 		}
@@ -1926,7 +1708,6 @@ public class PrintfFormat {
 			int savePrecision = precision;
 			int i;
 			char[] ca4, ca5;
-			boolean noDigits = false;
 			if (Double.isInfinite(x)) {
 				if (x == Double.POSITIVE_INFINITY) {
 					if (leadingSign)
@@ -1937,7 +1718,6 @@ public class PrintfFormat {
 						ca4 = "Inf".toCharArray();
 				} else
 					ca4 = "-Inf".toCharArray();
-				noDigits = true;
 			} else if (Double.isNaN(x)) {
 				if (leadingSign)
 					ca4 = "+NaN".toCharArray();
@@ -1945,13 +1725,12 @@ public class PrintfFormat {
 					ca4 = " NaN".toCharArray();
 				else
 					ca4 = "NaN".toCharArray();
-				noDigits = true;
 			} else {
 				if (!precisionSet)
 					precision = defaultDigits;
 				if (precision == 0)
 					precision = 1;
-				int ePos = -1;
+				int ePos;
 				if (conversionCharacter == 'g') {
 					sx = eFormatString(x, 'e').trim();
 					ePos = sx.indexOf('e');
@@ -2116,7 +1895,7 @@ public class PrintfFormat {
 		private String printDFormat(String sx) {
 			int nLeadingZeros = 0;
 			int nBlanks = 0, n = 0;
-			int i = 0, jFirst = 0;
+			int i = 0, jFirst;
 			boolean neg = sx.charAt(0) == '-';
 			if (sx.equals("0") && precisionSet && precision == 0)
 				sx = "";
@@ -2217,48 +1996,28 @@ public class PrintfFormat {
 				if (x == Short.MIN_VALUE)
 					t = "0";
 				else {
-					t = Integer.toString((~(-x - 1)) ^ Short.MIN_VALUE, 16);
+					t = Integer.toString((--x) ^ Short.MIN_VALUE, 16);
 					if (t.charAt(0) == 'F' || t.charAt(0) == 'f')
 						t = t.substring(16, 32);
 				}
-				switch (t.length()) {
-					case 1 :
-						sx = "800" + t;
-						break;
-					case 2 :
-						sx = "80" + t;
-						break;
-					case 3 :
-						sx = "8" + t;
-						break;
-					case 4 :
-						switch (t.charAt(0)) {
-							case '1' :
-								sx = "9" + t.substring(1, 4);
-								break;
-							case '2' :
-								sx = "a" + t.substring(1, 4);
-								break;
-							case '3' :
-								sx = "b" + t.substring(1, 4);
-								break;
-							case '4' :
-								sx = "c" + t.substring(1, 4);
-								break;
-							case '5' :
-								sx = "d" + t.substring(1, 4);
-								break;
-							case '6' :
-								sx = "e" + t.substring(1, 4);
-								break;
-							case '7' :
-								sx = "f" + t.substring(1, 4);
-								break;
-						}
-						break;
-				}
+                sx = switch (t.length()) {
+                    case 1 -> "800" + t;
+                    case 2 -> "80" + t;
+                    case 3 -> "8" + t;
+                    case 4 -> switch (t.charAt(0)) {
+                        case '1' -> "9" + t.substring(1, 4);
+                        case '2' -> "a" + t.substring(1, 4);
+                        case '3' -> "b" + t.substring(1, 4);
+                        case '4' -> "c" + t.substring(1, 4);
+                        case '5' -> "d" + t.substring(1, 4);
+                        case '6' -> "e" + t.substring(1, 4);
+                        case '7' -> "f" + t.substring(1, 4);
+                        default -> null;
+                    };
+                    default -> sx;
+                };
 			} else
-				sx = Integer.toString((int) x, 16);
+				sx = Integer.toString(x, 16);
 			return printXFormat(sx);
 		}
 		/**
@@ -2286,7 +2045,7 @@ public class PrintfFormat {
 			if (x == Long.MIN_VALUE)
 				sx = "8000000000000000";
 			else if (x < 0) {
-				String t = Long.toString((~(-x - 1)) ^ Long.MIN_VALUE, 16);
+				String t = Long.toString(--x ^ Long.MIN_VALUE, 16);
 				switch (t.length()) {
 					case 1 :
 						sx = "800000000000000" + t;
@@ -2388,7 +2147,7 @@ public class PrintfFormat {
 			if (x == Integer.MIN_VALUE)
 				sx = "80000000";
 			else if (x < 0) {
-				String t = Integer.toString((~(-x - 1)) ^ Integer.MIN_VALUE, 16);
+				String t = Integer.toString((--x) ^ Integer.MIN_VALUE, 16);
 				switch (t.length()) {
 					case 1 :
 						sx = "8000000" + t;
@@ -2412,29 +2171,16 @@ public class PrintfFormat {
 						sx = "8" + t;
 						break;
 					case 8 :
-						switch (t.charAt(0)) {
-							case '1' :
-								sx = "9" + t.substring(1, 8);
-								break;
-							case '2' :
-								sx = "a" + t.substring(1, 8);
-								break;
-							case '3' :
-								sx = "b" + t.substring(1, 8);
-								break;
-							case '4' :
-								sx = "c" + t.substring(1, 8);
-								break;
-							case '5' :
-								sx = "d" + t.substring(1, 8);
-								break;
-							case '6' :
-								sx = "e" + t.substring(1, 8);
-								break;
-							case '7' :
-								sx = "f" + t.substring(1, 8);
-								break;
-						}
+                        sx = switch (t.charAt(0)) {
+                            case '1' -> "9" + t.substring(1, 8);
+                            case '2' -> "a" + t.substring(1, 8);
+                            case '3' -> "b" + t.substring(1, 8);
+                            case '4' -> "c" + t.substring(1, 8);
+                            case '5' -> "d" + t.substring(1, 8);
+                            case '6' -> "e" + t.substring(1, 8);
+                            case '7' -> "f" + t.substring(1, 8);
+                            default -> null;
+                        };
 						break;
 				}
 			} else
@@ -2533,7 +2279,7 @@ public class PrintfFormat {
 			if (x == Short.MIN_VALUE)
 				sx = "100000";
 			else if (x < 0) {
-				String t = Integer.toString((~(-x - 1)) ^ Short.MIN_VALUE, 8);
+				String t = Integer.toString((--x) ^ Short.MIN_VALUE, 8);
 				switch (t.length()) {
 					case 1 :
 						sx = "10000" + t;
@@ -2581,7 +2327,7 @@ public class PrintfFormat {
 			if (x == Long.MIN_VALUE)
 				sx = "1000000000000000000000";
 			else if (x < 0) {
-				String t = Long.toString((~(-x - 1)) ^ Long.MIN_VALUE, 8);
+				String t = Long.toString((--x) ^ Long.MIN_VALUE, 8);
 				switch (t.length()) {
 					case 1 :
 						sx = "100000000000000000000" + t;
@@ -2677,42 +2423,21 @@ public class PrintfFormat {
 			if (x == Integer.MIN_VALUE)
 				sx = "20000000000";
 			else if (x < 0) {
-				String t = Integer.toString((~(-x - 1)) ^ Integer.MIN_VALUE, 8);
-				switch (t.length()) {
-					case 1 :
-						sx = "2000000000" + t;
-						break;
-					case 2 :
-						sx = "200000000" + t;
-						break;
-					case 3 :
-						sx = "20000000" + t;
-						break;
-					case 4 :
-						sx = "2000000" + t;
-						break;
-					case 5 :
-						sx = "200000" + t;
-						break;
-					case 6 :
-						sx = "20000" + t;
-						break;
-					case 7 :
-						sx = "2000" + t;
-						break;
-					case 8 :
-						sx = "200" + t;
-						break;
-					case 9 :
-						sx = "20" + t;
-						break;
-					case 10 :
-						sx = "2" + t;
-						break;
-					case 11 :
-						sx = "3" + t.substring(1);
-						break;
-				}
+				String t = Integer.toString((--x) ^ Integer.MIN_VALUE, 8);
+                sx = switch (t.length()) {
+                    case 1 -> "2000000000" + t;
+                    case 2 -> "200000000" + t;
+                    case 3 -> "20000000" + t;
+                    case 4 -> "2000000" + t;
+                    case 5 -> "200000" + t;
+                    case 6 -> "20000" + t;
+                    case 7 -> "2000" + t;
+                    case 8 -> "200" + t;
+                    case 9 -> "20" + t;
+                    case 10 -> "2" + t;
+                    case 11 -> "3" + t.substring(1);
+                    default -> null;
+                };
 			} else
 				sx = Integer.toString(x, 8);
 			return printOFormat(sx);
@@ -2789,7 +2514,7 @@ public class PrintfFormat {
 			if (!fieldWidthSet)
 				width = nPrint;
 			char[] ca = new char[width];
-			int i = 0;
+			int i;
 			if (leftJustify) {
 				ca[0] = x;
 				for (i = 1; i <= width - nPrint; i++)
@@ -2834,12 +2559,9 @@ public class PrintfFormat {
 			int n = 0;
 			if (width > nPrint)
 				n += width - nPrint;
-			if (nPrint >= x.length())
-				n += x.length();
-			else
-				n += nPrint;
+            n += nPrint;
 			char[] ca = new char[n];
-			int i = 0;
+			int i;
 			if (leftJustify) {
 				if (nPrint >= x.length()) {
 					char[] csx = x.toCharArray();
@@ -2941,8 +2663,7 @@ public class PrintfFormat {
 						variablePrecision = true;
 						precisionSet = true;
 					}
-					return;
-				} else {
+                } else {
 					while (pos < fmt.length()) {
 						char c = fmt.charAt(pos);
 						if (Character.isDigit(c))
@@ -3206,9 +2927,9 @@ public class PrintfFormat {
 		private String fmt;
 	}
 	/** Vector of control strings and format literals. */
-	private Vector vFmt = new Vector();
+	private Vector<ConversionSpecification> vFmt = new Vector<>();
 	/** Character position.  Used by the constructor. */
 	private int cPos = 0;
 	/** Character position.  Used by the constructor. */
-	private DecimalFormatSymbols dfs = null;
+	private DecimalFormatSymbols dfs;
 }

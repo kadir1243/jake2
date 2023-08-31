@@ -35,7 +35,6 @@ import jake2.qcommon.exec.Command;
 import jake2.qcommon.exec.Cvar;
 import jake2.qcommon.filesystem.FS;
 import jake2.qcommon.util.Lib;
-import jake2.qcommon.util.Vargs;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -507,7 +506,7 @@ public final class Console extends Globals {
 	SCR.AddDirtyPoint(0, 0);
 	SCR.AddDirtyPoint(width - 1, lines - 1);
 
-	String version = Com.sprintf("v%4.2f", new Vargs(1).add(VERSION));
+	String version = String.format("v%4.2f", VERSION);
 	for (int x = 0; x < 5; x++)
 	    ClientGlobals.re
 		    .DrawChar(width - 44 + x * 8, lines - 12, 128 + version

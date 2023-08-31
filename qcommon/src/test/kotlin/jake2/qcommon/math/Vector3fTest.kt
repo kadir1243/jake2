@@ -1,5 +1,6 @@
 package jake2.qcommon.math
 
+import jake2.qcommon.util.Vector3f
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

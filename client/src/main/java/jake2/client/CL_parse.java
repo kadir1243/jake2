@@ -24,7 +24,7 @@
 package jake2.client;
 
 import jake2.client.render.model_t;
-import jake2.client.sound.S;
+import jake2.client.sound.SoundSystem;
 import jake2.qcommon.Com;
 import jake2.qcommon.Defines;
 import jake2.qcommon.Globals;
@@ -85,7 +85,7 @@ public class CL_parse {
      * download from the server.
      */
     public static boolean CheckOrDownloadFile(String filename) {
-        if (filename.indexOf("..") != -1) {
+        if (filename.contains("..")) {
             Com.Printf("Refusing to download a path with ..\n");
             return true;
         }
@@ -147,21 +147,20 @@ public class CL_parse {
      * ====================== CL_RegisterSounds ======================
      */
     public static void RegisterSounds() {
-        S.BeginRegistration();
+        SoundSystem.BeginRegistration();
         CL_tent.RegisterTEntSounds();
         for (int i = 1; i < Defines.MAX_SOUNDS; i++) {
             if (ClientGlobals.cl.configstrings[Defines.CS_SOUNDS + i] == null
-                    || ClientGlobals.cl.configstrings[Defines.CS_SOUNDS + i]
-                            .equals("")
+                    || ClientGlobals.cl.configstrings[Defines.CS_SOUNDS + i].isEmpty()
                     || ClientGlobals.cl.configstrings[Defines.CS_SOUNDS + i]
                             .equals("\0"))
                 break;
-            ClientGlobals.cl.sound_precache[i] = S
+            ClientGlobals.cl.sound_precache[i] = SoundSystem
                     .RegisterSound(ClientGlobals.cl.configstrings[Defines.CS_SOUNDS
                             + i]);
             CL.SendKeyEvents(); // pump message loop
         }
-        S.EndRegistration();
+        SoundSystem.EndRegistration();
     }
 
     /*
@@ -277,12 +276,11 @@ public class CL_parse {
 
         // set gamedir
         // wtf?!
-        if (serverData.gameName.length() > 0
+        if (!serverData.gameName.isEmpty()
                 && (FS.fs_gamedirvar.string == null
-                        || FS.fs_gamedirvar.string.length() == 0 || FS.fs_gamedirvar.string
+                        || FS.fs_gamedirvar.string.isEmpty() || FS.fs_gamedirvar.string
                         .equals(serverData.gameName))
-                || (serverData.gameName.length() == 0 && (FS.fs_gamedirvar.string != null || FS.fs_gamedirvar.string
-                        .length() == 0)))
+                || (serverData.gameName.isEmpty() && (FS.fs_gamedirvar.string != null || FS.fs_gamedirvar.string.isEmpty())))
             Cvar.getInstance().Set("game", serverData.gameName);
 
         // parse player entity number
@@ -331,11 +329,11 @@ public class CL_parse {
 
         if (t != -1) {
             ci.name = s.substring(0, t);
-            s = s.substring(t + 1, s.length());
+            s = s.substring(t + 1);
             //s = t + 1;
         }
 
-        if (ClientGlobals.cl_noskins.value != 0 || s.length() == 0) {
+        if (ClientGlobals.cl_noskins.value != 0 || s.isEmpty()) {
 
             model_filename = ("players/male/tris.md2");
             weapon_filename = ("players/male/weapon.md2");
@@ -364,7 +362,7 @@ public class CL_parse {
             model_name = s.substring(0, pos);
 
             // isolate the skin name
-            skin_name = s.substring(pos + 1, s.length());
+            skin_name = s.substring(pos + 1);
 
             // model file
             model_filename = "players/" + model_name + "/tris.md2";
@@ -482,7 +480,7 @@ public class CL_parse {
         } else if (configMsg.index >= Defines.CS_SOUNDS
                 && configMsg.index < Defines.CS_SOUNDS + Defines.MAX_MODELS) {
             if (clientState.refresh_prepped)
-                clientState.sound_precache[configMsg.index - Defines.CS_SOUNDS] = S
+                clientState.sound_precache[configMsg.index - Defines.CS_SOUNDS] = SoundSystem
                         .RegisterSound(clientState.configstrings[configMsg.index]);
         } else if (configMsg.index >= Defines.CS_IMAGES
                 && configMsg.index < Defines.CS_IMAGES + Defines.MAX_MODELS) {
@@ -504,7 +502,6 @@ public class CL_parse {
      * =====================================================================
      */
 
-    private static final float[] pos_v = { 0, 0, 0 };
     /*
      * ================== CL_ParseStartSoundPacket ==================
      */
@@ -515,7 +512,7 @@ public class CL_parse {
             return;
         }
 
-        S.StartSound(
+        SoundSystem.StartSound(
                 soundMsg.origin,
                 soundMsg.entityIndex,
                 soundMsg.sendchan,
@@ -551,7 +548,7 @@ public class CL_parse {
 
             } else if (msg instanceof PrintMessage) {
                 if (((PrintMessage) msg).level == Defines.PRINT_CHAT) {
-                    S.StartLocalSound("misc/talk.wav");
+                    SoundSystem.StartLocalSound("misc/talk.wav");
                     ClientGlobals.con.ormask = 128;
                 }
                 Com.Printf(((PrintMessage) msg).text);
@@ -582,8 +579,7 @@ public class CL_parse {
                 CL_inv.ParseInventory((InventoryMessage) msg);
             } else if (msg instanceof TEMessage) {
                 CL_tent.ParseTEnt((TEMessage) msg);
-            } else if (msg instanceof SpawnBaselineMessage) {
-                SpawnBaselineMessage m = (SpawnBaselineMessage) msg;
+            } else if (msg instanceof SpawnBaselineMessage m) {
                 ClientGlobals.cl_entities[m.entityState.number].baseline.set(m.entityState);
             } else if (msg instanceof PacketEntitiesMessage) {
 //                     should be called after CL_ents.processFrameMessage

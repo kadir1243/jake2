@@ -34,7 +34,7 @@ public class clientinfo_t {
 	image_t icon;	// ptr
 	String iconname	="";
 	model_t model;	// ptr
-	model_t weaponmodel[] = new model_t[Defines.MAX_CLIENTWEAPONMODELS]; // arary of references
+	model_t[] weaponmodel = new model_t[Defines.MAX_CLIENTWEAPONMODELS]; // arary of references
 	
 //	public void reset()
 //	{

@@ -8,7 +8,7 @@ import jake2.game.components.MoveInfo
 import jake2.game.components.addComponent
 import jake2.game.components.getComponent
 import jake2.qcommon.Defines
-import jake2.qcommon.math.Vector3f
+import jake2.qcommon.util.Vector3f
 import jake2.qcommon.util.Lib
 import jake2.qcommon.util.Math3D
 

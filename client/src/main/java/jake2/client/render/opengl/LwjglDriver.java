@@ -67,12 +67,10 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
 	    Com.Println(e.getMessage());
 	    return new java.awt.DisplayMode[0];
 	}
-        LinkedList l = new LinkedList();
+        LinkedList<java.awt.DisplayMode> l = new LinkedList<>();
         l.add(toAwtDisplayMode(oldDisplayMode));
 
-        for (int i = 0; i < modes.length; i++) {
-            DisplayMode m = modes[i];
-
+        for (DisplayMode m : modes) {
             if (m.getBitsPerPixel() != oldDisplayMode.getBitsPerPixel())
                 continue;
             if (m.getFrequency() > oldDisplayMode.getFrequency())
@@ -80,10 +78,10 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
             if (m.getHeight() < 240 || m.getWidth() < 320)
                 continue;
 
-            int j = 0;
+            int j;
             java.awt.DisplayMode ml = null;
             for (j = 0; j < l.size(); j++) {
-                ml = (java.awt.DisplayMode) l.get(j);
+                ml = l.get(j);
                 if (ml.getWidth() > m.getWidth())
                     break;
                 if (ml.getWidth() == m.getWidth()
@@ -114,12 +112,10 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
 	    return new DisplayMode[0];
 	}
 
-        LinkedList l = new LinkedList();
+        LinkedList<DisplayMode> l = new LinkedList<>();
         l.add(oldDisplayMode);
 
-        for (int i = 0; i < modes.length; i++) {
-            DisplayMode m = modes[i];
-
+        for (DisplayMode m : modes) {
             if (m.getBitsPerPixel() != oldDisplayMode.getBitsPerPixel())
                 continue;
             if (m.getFrequency() > Math.max(60, oldDisplayMode.getFrequency()))
@@ -129,10 +125,10 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
             if (m.getHeight() > oldDisplayMode.getHeight() || m.getWidth() > oldDisplayMode.getWidth())
                 continue;
 
-            int j = 0;
+            int j;
             DisplayMode ml = null;
             for (j = 0; j < l.size(); j++) {
-                ml = (DisplayMode) l.get(j);
+                ml = l.get(j);
                 if (ml.getWidth() > m.getWidth())
                     break;
                 if (ml.getWidth() == m.getWidth()
@@ -156,15 +152,13 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
 
     private DisplayMode findDisplayMode(Dimension dim) {
         DisplayMode mode = null;
-        DisplayMode m = null;
         DisplayMode[] modes = getLWJGLModeList();
         int w = dim.width;
         int h = dim.height;
 
-        for (int i = 0; i < modes.length; i++) {
-            m = modes[i];
-            if (m.getWidth() == w && m.getHeight() == h) {
-                mode = m;
+        for (DisplayMode displayMode : modes) {
+            if (displayMode.getWidth() == w && displayMode.getHeight() == h) {
+                mode = displayMode;
                 break;
             }
         }
@@ -174,16 +168,14 @@ public abstract class LwjglDriver extends LwjglGL implements GLDriver {
     }
 
     String getModeString(DisplayMode m) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(m.getWidth());
-        sb.append('x');
-        sb.append(m.getHeight());
-        sb.append('x');
-        sb.append(m.getBitsPerPixel());
-        sb.append('@');
-        sb.append(m.getFrequency());
-        sb.append("Hz");
-        return sb.toString();
+        return String.valueOf(m.getWidth()) +
+                'x' +
+                m.getHeight() +
+                'x' +
+                m.getBitsPerPixel() +
+                '@' +
+                m.getFrequency() +
+                "Hz";
     }
 
     /**

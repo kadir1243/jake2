@@ -29,8 +29,8 @@ import jake2.game.items.GameItems;
 import jake2.game.monsters.*;
 import jake2.qcommon.Com;
 import jake2.qcommon.Defines;
-import jake2.qcommon.EntityParserKt;
 import jake2.qcommon.edict_t;
+import jake2.qcommon.util.EntityParser;
 import jake2.qcommon.util.Lib;
 import jake2.qcommon.util.Math3D;
 
@@ -683,8 +683,7 @@ public class GameSpawn {
         for (int i = 0; i < gameExports.game.maxclients; i++)
             gameExports.g_edicts[i + 1].setClient(gameExports.game.clients[i]);
 
-        EntityParserKt.parseEntities(entities).forEach(map -> {
-
+        EntityParser.parseEntities(entities).forEach(map -> {
             final SubgameEntity ent;
             if ("worldspawn".equals(map.get("classname")))
                 ent = gameExports.g_edicts[0];
@@ -849,7 +848,7 @@ public class GameSpawn {
                 .collect(Collectors.joining(" ", "{", "}"));
 
         // actually we expect 1 entity
-        EntityParserKt.parseEntities(entities).forEach(entity -> {
+        EntityParser.parseEntities(entities).forEach(entity -> {
             SubgameEntity newThing = gameExports.G_Spawn();
             entity.forEach((key, value) -> ED_ParseField(key, value, newThing, gameExports));
             putInFrontOfCreator(creator, newThing);

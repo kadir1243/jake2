@@ -93,7 +93,7 @@ public class Math3D {
 		to[1] = veca[1] + scale * vecb[1];
 		to[2] = veca[2] + scale * vecb[2];
 	}
-	public static final float VectorNormalize(float[] v) {
+	public static float VectorNormalize(float[] v) {
 
 		float length = VectorLength(v);
 		if (length != 0.0f) {
@@ -104,14 +104,10 @@ public class Math3D {
 		}
 		return length;
 	}
-	public static final float VectorLength(float v[]) {
+	public static float VectorLength(float v[]) {
 		return (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 	}
-	public static void VectorInverse(float[] v) {
-		v[0] = -v[0];
-		v[1] = -v[1];
-		v[2] = -v[2];
-	}
+
 	public static void VectorScale(float[] in, float scale, float[] out) {
 		out[0] = in[0] * scale;
 		out[1] = in[1] * scale;
@@ -239,25 +235,7 @@ public class Math3D {
 	public static float SHORT2ANGLE(int x) {
 		return (x * shortratio);
 	}
-	/*
-	================
-	R_ConcatTransforms
-	================
-	*/
-	public static void R_ConcatTransforms(float in1[][], float in2[][], float out[][]) {
-		out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] + in1[0][2] * in2[2][0];
-		out[0][1] = in1[0][0] * in2[0][1] + in1[0][1] * in2[1][1] + in1[0][2] * in2[2][1];
-		out[0][2] = in1[0][0] * in2[0][2] + in1[0][1] * in2[1][2] + in1[0][2] * in2[2][2];
-		out[0][3] = in1[0][0] * in2[0][3] + in1[0][1] * in2[1][3] + in1[0][2] * in2[2][3] + in1[0][3];
-		out[1][0] = in1[1][0] * in2[0][0] + in1[1][1] * in2[1][0] + in1[1][2] * in2[2][0];
-		out[1][1] = in1[1][0] * in2[0][1] + in1[1][1] * in2[1][1] + in1[1][2] * in2[2][1];
-		out[1][2] = in1[1][0] * in2[0][2] + in1[1][1] * in2[1][2] + in1[1][2] * in2[2][2];
-		out[1][3] = in1[1][0] * in2[0][3] + in1[1][1] * in2[1][3] + in1[1][2] * in2[2][3] + in1[1][3];
-		out[2][0] = in1[2][0] * in2[0][0] + in1[2][1] * in2[1][0] + in1[2][2] * in2[2][0];
-		out[2][1] = in1[2][0] * in2[0][1] + in1[2][1] * in2[1][1] + in1[2][2] * in2[2][1];
-		out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] + in1[2][2] * in2[2][2];
-		out[2][3] = in1[2][0] * in2[0][3] + in1[2][1] * in2[1][3] + in1[2][2] * in2[2][3] + in1[2][3];
-	}
+
 	/**
 	 * concatenates 2 matrices each [3][3].
 	 */
@@ -313,7 +291,7 @@ public class Math3D {
 	 stellt fest, auf welcher Seite sich die Kiste befindet, wenn die Ebene 
 	 durch Entfernung und Senkrechten-Normale gegeben ist.    
 	 erste Version mit vec3_t... */
-	public static final int BoxOnPlaneSide(float emins[], float emaxs[], cplane_t p) {
+	public static int BoxOnPlaneSide(float emins[], float emaxs[], cplane_t p) {
 
 		assert(emins.length == 3 && emaxs.length == 3) : "vec3_t bug";
 
@@ -330,44 +308,44 @@ public class Math3D {
 		}
 
 		//	   general case
-		switch (p.signbits) {
-			case 0 :
-				dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
-				dist2 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
-				break;
-			case 1 :
-				dist1 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
-				dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
-				break;
-			case 2 :
-				dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
-				dist2 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
-				break;
-			case 3 :
-				dist1 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
-				dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
-				break;
-			case 4 :
-				dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
-				dist2 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
-				break;
-			case 5 :
-				dist1 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
-				dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
-				break;
-			case 6 :
-				dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
-				dist2 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
-				break;
-			case 7 :
-				dist1 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
-				dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
-				break;
-			default :
-				dist1 = dist2 = 0;
-				assert(false) : "BoxOnPlaneSide bug";
-				break;
-		}
+        switch (p.signbits) {
+            case 0 -> {
+                dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
+                dist2 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
+            }
+            case 1 -> {
+                dist1 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
+                dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
+            }
+            case 2 -> {
+                dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
+                dist2 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
+            }
+            case 3 -> {
+                dist1 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
+                dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
+            }
+            case 4 -> {
+                dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
+                dist2 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
+            }
+            case 5 -> {
+                dist1 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emins[2];
+                dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emaxs[2];
+            }
+            case 6 -> {
+                dist1 = p.normal[0] * emaxs[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
+                dist2 = p.normal[0] * emins[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
+            }
+            case 7 -> {
+                dist1 = p.normal[0] * emins[0] + p.normal[1] * emins[1] + p.normal[2] * emins[2];
+                dist2 = p.normal[0] * emaxs[0] + p.normal[1] * emaxs[1] + p.normal[2] * emaxs[2];
+            }
+            default -> {
+                dist1 = dist2 = 0;
+				throw new AssertionError("BoxOnPlaneSide bug");
+            }
+        }
 
 		sides = 0;
 		if (dist1 >= p.dist)
@@ -375,34 +353,11 @@ public class Math3D {
 		if (dist2 < p.dist)
 			sides |= 2;
 
-		assert(sides != 0) : "BoxOnPlaneSide(): sides == 0 bug";
+		assert sides != 0 : "BoxOnPlaneSide(): sides == 0 bug";
 
 		return sides;
 	}
-	//	this is the slow, general version
-	private static float corners[][] = new float[2][3];
-	public static final int BoxOnPlaneSide2(float[] emins, float[] emaxs, cplane_t p) {
 
-		for (int i = 0; i < 3; i++) {
-			if (p.normal[i] < 0) {
-				corners[0][i] = emins[i];
-				corners[1][i] = emaxs[i];
-			}
-			else {
-				corners[1][i] = emins[i];
-				corners[0][i] = emaxs[i];
-			}
-		}
-		float dist1 = DotProduct(p.normal, corners[0]) - p.dist;
-		float dist2 = DotProduct(p.normal, corners[1]) - p.dist;
-		int sides = 0;
-		if (dist1 >= 0)
-			sides = 1;
-		if (dist2 < 0)
-			sides |= 2;
-
-		return sides;
-	}
 	public static void AngleVectors(float[] angles, float[] forward, float[] right, float[] up) {
 
 		float cr = 2.0f * piratio;
@@ -446,7 +401,7 @@ public class Math3D {
 		result[1] = point[1] + forward[1] * distance[0] + right[1] * distance[1];
 		result[2] = point[2] + forward[2] * distance[0] + right[2] * distance[1] + distance[2];
 	}
-	public static final float DotProduct(float[] x, float[] y) {
+	public static float DotProduct(float[] x, float[] y) {
 		return x[0] * y[0] + x[1] * y[1] + x[2] * y[2];
 	}
 	public static void CrossProduct(float[] v1, float[] v2, float[] cross) {
@@ -454,12 +409,7 @@ public class Math3D {
 		cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
 		cross[2] = v1[0] * v2[1] - v1[1] * v2[0];
 	}
-	public static int Q_log2(int val) {
-		int answer = 0;
-		while ((val >>= 1) > 0)
-			answer++;
-		return answer;
-	}
+
 	public static float DEG2RAD(float in) {
 		return (in * (float) Math.PI) / 180.0f;
 	}
@@ -477,7 +427,7 @@ public class Math3D {
 		return a2 + frac * (a1 - a2);
 	}
 	public static float CalcFov(float fov_x, float width, float height) {
-		double a = 0.0f;
+		double a;
 		double x;
 
 		if (fov_x < 1.0f || fov_x > 179.0f)

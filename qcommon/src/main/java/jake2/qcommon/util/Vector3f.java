@@ -1,5 +1,7 @@
 package jake2.qcommon.util;
 
+import java.util.Objects;
+
 import static java.lang.Math.*;
 
 public class Vector3f {
@@ -9,9 +11,9 @@ public class Vector3f {
     public static final Vector3f unitY = new Vector3f(0f, 1f, 0f);
     public static final Vector3f unitZ = new Vector3f(0f, 0f, 1f);
 
-    private final float x;
-    private final float y;
-    private final float z;
+    public final float x;
+    public final float y;
+    public final float z;
 
     public Vector3f(float x, float y, float z) {
         this.x = x;
@@ -131,5 +133,33 @@ public class Vector3f {
                 pitch += 360f;
         }
         return new float[]{-pitch, yaw, 0f};
+    }
+
+    public Vector3f copy() {
+        return new Vector3f(x, y, z);
+    }
+
+    @Override
+    public String toString() {
+        return "Vector3f{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof float[] array && array.length == 3) {
+            return x == array[0] && y == array[1] && z == array[2];
+        }
+        if (!(o instanceof Vector3f vector3f)) return false;
+        return x == vector3f.x && y == vector3f.y && z == vector3f.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }
